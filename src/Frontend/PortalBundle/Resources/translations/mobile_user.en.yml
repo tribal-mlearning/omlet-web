@@ -1,0 +1,75 @@
+#/*
+# * Copyright (c) 2012, TATRC and Tribal
+# * All rights reserved.
+# *
+# * Redistribution and use in source and binary forms, with or without
+# * modification, are permitted provided that the following conditions are met:
+# * * Redistributions of source code must retain the above copyright
+# *   notice, this list of conditions and the following disclaimer.
+# * * Redistributions in binary form must reproduce the above copyright
+# *   notice, this list of conditions and the following disclaimer in the
+# *   documentation and/or other materials provided with the distribution.
+# * * Neither the name of TATRC or TRIBAL nor the
+# *   names of its contributors may be used to endorse or promote products
+# *   derived from this software without specific prior written permission.
+# *
+# * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+# * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+# * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+# * DISCLAIMED. IN NO EVENT SHALL TATRC OR TRIBAL BE LIABLE FOR ANY
+# * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+# * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+# * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+# * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+# * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+# * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+# */
+message.delete.confirm: Are you sure you want to delete?
+message.confirm_session_data_deletion: The user selected for deletion has session data assigned to him. Do you want to export it to CSV format before delete the user and his session data?
+
+# global texts
+page.title: Mobile User Management
+field.username: Username
+field.state: State
+field.roles: Roles
+
+state.preactivation: Pre-activation
+state.activated: Activated
+state.disabled: Disabled
+
+#actions
+action.new: Create a new mobile user
+action.show: Show
+action.edit: Edit
+action.create: Create
+action.update: Save
+action.delete: Delete
+action.back: Back to the list
+action.generate: Generate mobile users by PIN numbers
+action.delete_metadata: Delete
+
+# i18n of index page
+index.table.column.actions: Actions
+index.table.title: Mobile users
+index.first_header: Mobile users
+index.second_header: Management
+
+# i18n of show page
+show.first_header: Mobile users
+show.second_header: Detail
+
+# i18n of edit page
+edit.first_header: Mobile users
+edit.second_header: Edit
+
+# i18n of new page
+new.first_header: Mobile users
+new.second_header: Create
+
+# i18n of generate page
+generate.first_header: Mobile users
+generate.second_header: Create by list
+generate.table.title: Mobile Users
+field.pin_numbers: PIN Numbers
+action.submit_pins: Submit
+action.create_mobile_users: Create

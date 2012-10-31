@@ -1,0 +1,67 @@
+{% extends 'FrontendPortalBundle::layout.html.twig' %}
+
+{% block title %}{% trans from "news" %}page.title{% endtrans %}{% endblock %}
+
+{% block content %}    
+    <h1>{{ 'show.first_header' | trans({},'news') }}</h1>
+    <h2>{{ 'show.second_header' | trans({},'news') }}</h2>
+
+    {% include 'FrontendPortalBundle::flash_message.html.twig' %}
+
+    <table class="record_properties tb-showinfo">
+        <tbody>
+            <tr>
+                <th width="15%">{{ 'field.headline' | trans({},'news') }}</th>
+                <td>{{ entity.headline }}</td>
+            </tr>
+            <tr>
+                <th>{{ 'field.text' | trans({},'news') }}</th>
+                <td>{{ entity.text }}</td>
+            </tr>
+            <tr>
+                <th>{{ 'field.thumbnail' | trans({},'news') }}</th>
+                <td><img src="/{{ entity.thumbnail.webPath }}" width="50" heigth="50"/></td>
+            </tr>                  
+            <tr>
+                <th>{{ 'field.image' | trans({},'news') }}</th>
+                <td><img src="/{{ entity.image.webPath }}" width="50" heigth="50"/></td>
+            </tr>            
+            <tr>
+                <th>{{ 'field.created.by' | trans({},'news') }}</th>
+                <td>{{ entity.user.username }}</td>
+            </tr>
+            <tr>
+                <th>{{ 'field.created.at' | trans({},'news') }}</th>
+                <td>{{ entity.createdAt | date('news.date_format' | trans({},'news')) }}</td>
+            </tr>
+            <tr>
+                <th>{{ 'field.countries' | trans({},'news') }}</th>                
+                <td>
+                {% for country in entity.countries %}
+                        {{ country.name }} ({{ country.code }}) <br/>
+                    {% endfor %}
+                </td>        
+            </tr>            
+        </tbody>
+    </table>
+
+    <ul class="record_actions">
+        <li>
+            <a class="btn150" href="{{ path('frontend_portal_news_index', { 'load_state': 'true' }) }}">
+                {{ 'action.back' | trans({},'news') }}
+            </a>
+        </li>
+        {% if hasPermissions('EDIT', 'NEWS') %}
+            <li>
+                <a class="btn100" href="{{ path('frontend_portal_news_edit', { 'id': entity.id }) }}">
+                    {{ 'action.edit' | trans({},'news') }}
+                </a>
+            </li>
+        {% endif %}
+        {% if hasPermissions('DELETE', 'NEWS') %}
+            <li>
+                <a href="{{ path('frontend_portal_news_delete', { 'id': entity.id }) }}" class="btn100 submit-button" onclick="return confirm('{{ 'message.delete.confirm' | trans({},'news') }}');">{{ 'action.delete' | trans({},'news') }}</a>
+            </li>
+        {% endif %}
+    </ul>
+{% endblock %}

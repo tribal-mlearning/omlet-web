@@ -1,0 +1,97 @@
+{#/*#}
+{#* Copyright (c) 2012, TATRC and Tribal#}
+{#* All rights reserved.#}
+{#*#}
+{#* Redistribution and use in source and binary forms, with or without#}
+{#* modification, are permitted provided that the following conditions are met:#}
+{#* * Redistributions of source code must retain the above copyright#}
+{#*   notice, this list of conditions and the following disclaimer.#}
+{#* * Redistributions in binary form must reproduce the above copyright#}
+{#*   notice, this list of conditions and the following disclaimer in the#}
+{#*   documentation and/or other materials provided with the distribution.#}
+{#* * Neither the name of TATRC or TRIBAL nor the#}
+{#*   names of its contributors may be used to endorse or promote products#}
+{#*   derived from this software without specific prior written permission.#}
+{#*#}
+{#* THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND#}
+{#* ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED#}
+{#* WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE#}
+{#* DISCLAIMED. IN NO EVENT SHALL TATRC OR TRIBAL BE LIABLE FOR ANY#}
+{#* DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES#}
+{#* (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;#}
+{#* LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND#}
+{#* ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT#}
+{#* (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS#}
+{#* SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.#}
+{#*/#}
+{% extends 'FrontendPortalBundle::layout.html.twig' %}
+
+{% block title %}{% trans from "mobile_user" %}page.title{% endtrans %}{% endblock %}
+
+{% block js %}
+    {{ parent() }}
+
+    {% javascripts
+        '@FrontendPortalBundle/Resources/public/js/MobileUser/index.js'
+        '@FrontendPortalBundle/Resources/public/js/MobileUser/edit.js'
+    %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>	
+    {% endjavascripts %}
+    
+    <script type="text/javascript">
+        MobileUserIndex.i18n = {
+            confirmDelete : "{{ 'message.delete.confirm' | trans({},'mobile_user') }}",
+            confirmSessionDataDeletionMessage: "{{ 'message.confirm_session_data_deletion' | trans({},'mobile_user') }}"
+        };
+    </script>        
+{% endblock %}
+
+{% block content %}    
+    <h1>{{ 'edit.first_header' | trans({},'mobile_user') }}</h1>
+    <h2>{{ 'edit.second_header' | trans({},'mobile_user') }}</h2>
+    
+    {% include 'FrontendPortalBundle:SessionData:_confirm_session_data_deletion.html.twig' %}
+
+    {% include 'FrontendPortalBundle::flash_message.html.twig' %}
+
+    {{ form_errors(edit_form) }}
+
+    <form action="{{ path('frontend_portal_mobileuser_update', { 'id': entity.id }) }}" method="post" {{ form_enctype(edit_form) }}>
+        {{ form_label(edit_form.username, 'field.username' | trans({},'mobile_user'), { 'attr' : {'class': 'label-i'} }) }}
+        {{ form_widget(edit_form.username, { 'attr': {'class': 'text'} }) }}
+        <div class="errors">
+            {{ form_errors(edit_form.username) }}
+        </div>
+        <span class="break"><!-- --></span>
+
+        {{ form_label(edit_form.state, 'field.state' | trans({},'mobile_user'), { 'attr' : {'class': 'label-i'} }) }}
+        {{ form_widget(edit_form.state, { 'attr': {'class': 'text'} }) }}
+        <div class="errors">
+            {{ form_errors(edit_form.state) }}
+        </div>
+        <span class="break"><!-- --></span>
+
+        <div class="hidden">
+            {{ form_rest(edit_form) }}
+        </div>	    
+
+        <a class="big-button submit-button mb20" href="javascript:;" title="{{ 'action.update' | trans({},'mobile_user') }}">{{ 'action.update' | trans({},'mobile_user') }}</a>
+        
+        <input type="submit" style="display: none" value="Submit" />
+    </form>
+
+    <ul class="record_actions mt20">
+        <li>
+            <a class="btn150" href="{{ path('frontend_portal_mobileuser_index', { 'load_state': 'true' }) }}">
+                {{ 'action.back' | trans({},'mobile_user') }}
+            </a>
+        </li>
+        {% if hasPermissions('DELETE', 'USER') %}
+            <li>
+                <a id="delete_button" user_id="{{ entity.id }}" class="btn100 submit-button">
+                    {{ 'action.delete' | trans({},'mobile_user') }}
+                </a>
+            </li>
+        {% endif %}
+    </ul>
+{% endblock %}

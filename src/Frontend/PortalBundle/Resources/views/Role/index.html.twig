@@ -1,0 +1,128 @@
+{#/*#}
+{#* Copyright (c) 2012, TATRC and Tribal#}
+{#* All rights reserved.#}
+{#*#}
+{#* Redistribution and use in source and binary forms, with or without#}
+{#* modification, are permitted provided that the following conditions are met:#}
+{#* * Redistributions of source code must retain the above copyright#}
+{#*   notice, this list of conditions and the following disclaimer.#}
+{#* * Redistributions in binary form must reproduce the above copyright#}
+{#*   notice, this list of conditions and the following disclaimer in the#}
+{#*   documentation and/or other materials provided with the distribution.#}
+{#* * Neither the name of TATRC or TRIBAL nor the#}
+{#*   names of its contributors may be used to endorse or promote products#}
+{#*   derived from this software without specific prior written permission.#}
+{#*#}
+{#* THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND#}
+{#* ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED#}
+{#* WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE#}
+{#* DISCLAIMED. IN NO EVENT SHALL TATRC OR TRIBAL BE LIABLE FOR ANY#}
+{#* DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES#}
+{#* (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;#}
+{#* LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND#}
+{#* ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT#}
+{#* (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS#}
+{#* SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.#}
+{#*/#}
+{% extends 'FrontendPortalBundle::layout.html.twig' %}
+
+{% block title %}{% trans from "role" %}page.title{% endtrans %}{% endblock %}
+
+{% block js %}
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#selectRole').change(function() {
+                var role_id=$(this).val();
+                $.getJSON('{{ path('role_getPermission', {'role_id': ''}) }}/' + role_id, function(data) {
+                    $('input:checkbox').attr('checked', false);
+                    for (i in data)
+                        $('#permission_'+data[i].id).attr('checked', true);
+                });
+            }).change();
+            var heightRoleContext = 0;
+            $(".role-context").each(function(){
+                var tempHeight = $(this).height();
+                if (tempHeight>heightRoleContext){
+                    heightRoleContext = tempHeight;
+                }
+            });
+            $(".role-context").css("height",heightRoleContext);
+
+            $("#create_role_dialog_image").click(function() {
+                $("#create_role_dialog").dialog("open");
+            });
+
+        });
+
+        function setPermission(permission) {
+            var role=$('#selectRole').val();
+            var insert=($('#permission_'+permission).attr('checked'))?'true':'false';
+            $.post('{{ path('role_setPermission') }}',
+                    {'role': role, 'permission': permission, 'insert': insert},
+                    null,
+                    null
+            );
+        }
+
+        function addRole(id, name) {
+            $('#selectRole').append(new Option(name, id, true, true)).change();
+        }
+
+        function deleteRole() {
+            if (confirm('{{ 'index.confirm_delete' | trans({},'role') }}')) {
+                id=$('#selectRole').val();
+                $.post(Routing.generate('role_delete', {'roleId': id}), null , function(data) {
+                    if (data.status != 'success') return;
+
+                    $("#selectRole option[value='" + id + "']").remove();
+                    $("#selectRole").change();
+                });
+            }
+        }
+    </script>
+{% endblock %}
+
+{% block content %}
+<h1>{{ 'index.first_header' | trans({},'role') }}</h1>
+
+{% include 'FrontendPortalBundle::_create_role_dialog.html.twig' %}
+
+<div class="role-content">
+        <div class="role-content-header">
+            <span class="choose-title">{{ 'choose.title' | trans({},'role') }}</span>
+            <select id="selectRole">
+                {% for role in roles %}
+                    {% if role.name != 'ROLE_USER_SUPERADMIN' %}
+                        <option value="{{ role.id }}">{{ role.alias }}</option>
+                    {% endif %}
+                {% endfor %}
+            </select>
+            <div class="icons">
+                {% if hasPermissions('create', 'access_control') %}
+                    <img id="create_role_dialog_image" height="15" width="15" src="/images/add.png" />
+                {% endif %}
+                {% if hasPermissions('delete', 'access_control') %}
+                    <img id="del_role_image" src="/images/delete-icon-x.png" height="15" width="15" onclick="deleteRole()" />
+                {% endif %}
+            </div>
+        </div>
+        <div class="role-content-contexts">
+            <ul>
+            {% for context in contexts %}
+                <li class="role-context">
+                    <div class="context-name">{{ context.alias }}</div>
+                    <ul>
+                    {% set disabledPermissionCB = '' %}
+                    {% if not hasPermissions('ASSIGN', 'ACCESS_CONTROL') %}{% set disabledPermissionCB = ' DISABLED' %}{% endif %}
+                    {% for permission in context.permissions %}
+                        <li style="margin-left:20px;">
+                            <input type="checkbox" class="" onclick="setPermission({{ permission.id }})" id="permission_{{ permission.id }}"{{ disabledPermissionCB }}> {{ permission.description }}
+                        </li>
+                    {% endfor %}
+                    </ul>
+                </li>
+            {% endfor %}
+            </ul>
+        </div>
+</div>
+{% endblock %}

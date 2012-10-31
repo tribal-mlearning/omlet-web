@@ -1,0 +1,135 @@
+{#/*#}
+{#* Copyright (c) 2012, TATRC and Tribal#}
+{#* All rights reserved.#}
+{#*#}
+{#* Redistribution and use in source and binary forms, with or without#}
+{#* modification, are permitted provided that the following conditions are met:#}
+{#* * Redistributions of source code must retain the above copyright#}
+{#*   notice, this list of conditions and the following disclaimer.#}
+{#* * Redistributions in binary form must reproduce the above copyright#}
+{#*   notice, this list of conditions and the following disclaimer in the#}
+{#*   documentation and/or other materials provided with the distribution.#}
+{#* * Neither the name of TATRC or TRIBAL nor the#}
+{#*   names of its contributors may be used to endorse or promote products#}
+{#*   derived from this software without specific prior written permission.#}
+{#*#}
+{#* THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND#}
+{#* ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED#}
+{#* WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE#}
+{#* DISCLAIMED. IN NO EVENT SHALL TATRC OR TRIBAL BE LIABLE FOR ANY#}
+{#* DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES#}
+{#* (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;#}
+{#* LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND#}
+{#* ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT#}
+{#* (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS#}
+{#* SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.#}
+{#*/#}
+{% extends 'FrontendPortalBundle::layout.html.twig' %}
+
+{% block title %}{% trans from "package" %}page.title{% endtrans %}{% endblock %}
+
+{% block content %}  
+
+    <h1>{{ 'show.first_header' | trans({},'package') }}</h1>
+    <h2>{{ 'show.second_header' | trans({},'package') }}</h2>  
+    
+    {% include 'FrontendPortalBundle::flash_message.html.twig' %}
+
+    <table class="record_properties tb-showinfo">
+        <tbody>
+            <tr>
+                <th width="20%">{{ 'field.thumbnail' | trans({},'package') }}</th>
+                {% if  (entity.thumbnail == null) %} 
+                    <td><img src="/images/default_thumbnail.png" width="50" heigth="50"/></td>
+                {% else %}                  
+                    <td><img src="/{{ entity.thumbnail.webPath }}" width="50" heigth="50"/></td>
+                {% endif %}
+            </tr>
+            <tr>
+                <th>{{ 'field.uniqueId' | trans({},'package') }}</th>
+                <td>{{ entity.uniqueId }}</td>
+            </tr>
+            <tr>
+                <th>{{ 'field.title' | trans({},'package') }}</th>                
+                <td>{{ entity.title }}</td>        
+            </tr>
+            <tr>
+                <th>{{ 'field.description' | trans({},'package') }}</th>                
+                <td>{{ entity.description }}</td>        
+            </tr>
+            <tr>
+                <th>{{ 'field.metadata' | trans({},'package') }}</th>
+                <td>{{ entity.metadataDescription }}</td>
+            </tr>            	       
+            <tr>
+                <th>{{ 'field.published' | trans({},'package') }}</th>                
+                <td>{{ yes_no(entity.published) }}</td>        
+            </tr>
+            <tr>
+                <th>{{ 'field.publish_start' | trans({},'package') }}</th>                
+                <td>{{ entity.publishStart | date('package.datetime_format' | trans({},'package')) }}</td>
+            </tr>
+            <tr>
+                <th>{{ 'field.owned_by' | trans({},'package') }}</th>                
+                <td>{{ entity.user.username }}</td>        
+            </tr>	            
+            <tr>
+                <th>{{ 'field.created_at' | trans({},'package') }}</th>                
+                <td>{{ entity.createdAt | date('package.date_format' | trans({},'package')) }}</td>   
+            </tr>
+            <tr>
+                <th>{{ 'field.updated_at' | trans({},'package') }}</th>                
+                <td>{{ entity.updatedAt | date('package.date_format' | trans({},'package')) }}</td>
+            </tr>            
+            {% if hasCategories %}
+                <tr>
+                    <th>{{ 'field.categories' | trans({},'package') }}</th>
+                    <td>
+                    {% for category in entity.categories %}
+                        {{ category }}
+                        <br />
+                    {% endfor %}
+                    </td>
+                </tr>
+            {% endif %}
+            <tr>
+                <th>{{ 'field.files' | trans({},'package') }}</th>                
+                <td>
+                {% for file in entity.files %}
+                    {% if hasPermissions('download', 'package') %}
+                        <a href="{{ path('frontend_portal_package_download', { 'id': entity.id, 'file_id': file.id }) }}">
+                            {{ file.name }}
+                        </a>
+                    {% else %}
+                        {{ file.name }}
+                    {% endif %}
+                    {{ file.getMetadataDescription() }}
+                    <br/>
+                {% endfor %}	            
+                </td>        
+            </tr>            
+        </tbody>
+    </table>
+
+    <ul class="record_actions">
+        <li>
+            <a class="btn150" href="{{ path('frontend_portal_package_index', { 'load_state': 'true' }) }}">
+                {{ 'actions.back' | trans({},'package') }}
+            </a>
+        </li>
+        {% if hasPermissions('EDIT', 'PACKAGE') %}
+            <li>
+                <a class="btn100" href="{{ path('frontend_portal_package_edit', { 'id': entity.id }) }}">
+                    {{ 'actions.edit' | trans({},'package') }}
+                </a>
+            </li>
+        {% endif %}
+        {% if hasPermissions('DELETE', 'PACKAGE') %}
+            <li>
+                <a href="{{ path('frontend_portal_package_delete', { 'id': entity.id }) }}" class="btn100 submit-button" onclick="return confirm('{{ 'message.confirm.delete' | trans({},'package') }}');">
+                    {{ 'actions.delete' | trans({},'package') }}
+                </a>
+            </li>
+        {% endif %}
+    </ul>
+{% endblock %}

@@ -1,0 +1,7 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteCond %{REQUEST_URI} !/images/ 
+    RewriteCond %{REQUEST_URI} !/files/ 
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^(.*)$ app_frontend.php [QSA,L]
+</IfModule>

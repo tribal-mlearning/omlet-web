@@ -1,0 +1,143 @@
+{#/*#}
+{#* Copyright (c) 2012, TATRC and Tribal#}
+{#* All rights reserved.#}
+{#*#}
+{#* Redistribution and use in source and binary forms, with or without#}
+{#* modification, are permitted provided that the following conditions are met:#}
+{#* * Redistributions of source code must retain the above copyright#}
+{#*   notice, this list of conditions and the following disclaimer.#}
+{#* * Redistributions in binary form must reproduce the above copyright#}
+{#*   notice, this list of conditions and the following disclaimer in the#}
+{#*   documentation and/or other materials provided with the distribution.#}
+{#* * Neither the name of TATRC or TRIBAL nor the#}
+{#*   names of its contributors may be used to endorse or promote products#}
+{#*   derived from this software without specific prior written permission.#}
+{#*#}
+{#* THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND#}
+{#* ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED#}
+{#* WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE#}
+{#* DISCLAIMED. IN NO EVENT SHALL TATRC OR TRIBAL BE LIABLE FOR ANY#}
+{#* DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES#}
+{#* (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;#}
+{#* LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND#}
+{#* ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT#}
+{#* (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS#}
+{#* SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.#}
+{#*/#}
+{% extends 'FrontendPortalBundle::layout.html.twig' %}
+
+{% block title %}{% trans from "mobile_user" %}page.title{% endtrans %}{% endblock %}
+
+{% block js %}
+    {{ parent() }}
+
+    {% javascripts
+        '@FrontendPortalBundle/Resources/public/js/MobileUser/index.js'
+    %}
+    <script type="text/javascript" src="{{ asset_url }}">
+    </script>
+    {% endjavascripts %}
+    
+    <script type="text/javascript">
+        $(document).ready(function(){
+            setTimeout(function() {
+                $('input').placeholder();
+            }, 500);
+         });           
+    </script>
+
+    <script type="text/javascript">
+        MobileUserIndex.i18n = {
+            confirmDelete : "{{ 'message.delete.confirm' | trans({},'mobile_user') }}",
+            confirmSessionDataDeletionMessage: "{{ 'message.confirm_session_data_deletion' | trans({},'mobile_user') }}"
+        };
+        
+        $(function(){
+            var load_state = {{ app.request.get('load_state') is null ? "false" : app.request.get('load_state') }};
+
+            $('#records').dataTable( {
+                "oLanguage": datatables_i18n,
+                "bPaginate": true,
+                "bLengthChange": false,
+                "bFilter": true,
+                "bSort": true,
+                "bInfo": true,
+                "bAutoWidth": true,
+                "bStateSave": true,
+                "fnStateLoadParams": function(oSettings, oData) { return load_state; },
+                "sDom": '<"dt-top-elements"pif>t<pi><"dataTables_clear">',
+                "aoColumns" : [
+                    null,
+                    null,
+                    { "bSortable" : false }
+                ]         
+            } );
+        });
+    </script>
+{% endblock %}
+
+{% block bodyAttributes %}id="mobileuser-screen"{% endblock %}
+
+{% block content %}
+    <h1>{{ 'index.first_header' | trans({},'mobile_user') }}</h1>
+    <!--<h2>{{ 'index.second_header' | trans({},'mobile_user') }}</h2>-->
+
+    {% include 'FrontendPortalBundle:SessionData:_confirm_session_data_deletion.html.twig' %}
+
+    {% include 'FrontendPortalBundle::flash_message.html.twig' %}        
+
+    <table id="records" class="records_list">
+        <thead>
+            <tr>
+                <th colspan="4" class="type">{{ 'index.table.title' | trans({},'mobile_user') }}</th>
+            </tr>
+            <tr>	          
+                <th>{{ 'field.username' | trans({},'mobile_user') }}</th>
+                <th width="20%">{{ 'field.state' | trans({},'mobile_user') }}</th>
+                <th width="20%">{{ 'index.table.column.actions' | trans({},'mobile_user') }}</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for entity in entities %}
+            <tr class="{{ (loop.index0 is odd)?'odd':'' }}">
+                <td>{{ entity.username }}</td>
+                <td>{{ user_state(entity.state) }}</td>
+                <td>
+                    <ul class="icons-ul">
+                        {% if hasPermissions('DELETE', 'USER') %}
+                        <li>
+                            {% if not is_current_user({ 'id': entity.id }) %} 
+                                <img src="/images/delete.png" width="15" height="22" alt="{{ 'action.delete' | trans({},'mobile_user') }}" title="{{ 'action.delete' | trans({},'mobile_user') }}" class="delete_image" user_id="{{ entity.id }}" style="cursor: pointer" />
+                            {% endif %}
+                        </li>
+                        {% endif %}
+                        <li>
+                            <a href="{{ path('frontend_portal_mobileuser_show', { 'id': entity.id }) }}">
+                               <img src="/images/show.png" width="24" height="24" alt="{{ 'action.show' | trans({},'mobile_user') }}" title="{{ 'action.show' | trans({},'mobile_user') }}" />
+                            </a>
+                        </li>
+                        {% if hasPermissions('EDIT', 'USER') %}
+                        <li>
+                            <a href="{{ path('frontend_portal_mobileuser_edit', { 'id': entity.id }) }}">
+                                <img src="/images/edit.png" width="22" height="22" alt="{{ 'action.edit' | trans({},'mobile_user') }}" title="{{ 'action.edit' | trans({},'mobile_user') }}" />
+                            </a>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% if hasPermissions('CREATE', 'USER') %}
+    <div class="record_actions_div_mu">
+        <ul class="record_actions">
+            <li>
+                <a class="btn-create-new" href="{{ path('frontend_portal_mobileuser_new') }}">
+                    {{ 'action.new' | trans({},'mobile_user') }}
+                </a>
+            </li>
+        </ul>
+    </div>
+{% endif %}
+{% endblock %}

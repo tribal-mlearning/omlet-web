@@ -1,0 +1,21 @@
+/* chart */
+.chart-container {/*width:277px;*/width:482px; margin:50px auto 0; position:relative;}
+.chart-container .feedback {font-size:24px; float:right; font-weight:bold;}
+.chart-container .count {width:10px; display:block; position:absolute; color:#666; font-size:12px; text-align:center;}
+.chart-container .count-yaxis {top:-5px; left:-5px; display:none;}
+.chart-container .count-xaxis {bottom:-2px; right:-3px; display:none;}
+.chart-container .tick {display:block; position:absolute; background-color:#ccc;}
+.chart-container .tick-yaxis {width:3px; height:1px; top:0; left:7px; display:none;}
+.chart-container .tick-xaxis {width:1px; height:3px; bottom:10px; right:1px; display:none;}
+.chart-container .label {color:#666; font-size:14px;}
+.chart-container .label-xaxis {width:60px; display:block; margin-left:220px; text-align:center;}
+.chart-container .label-yaxis {width:12px; height:35px; margin:123px 8px 0 0; float:left; background-image:url('../images/bgr_label_chart.gif'); background-repeat:no-repeat; text-indent:-9999px; /*-webkit-transform:rotate(-90deg); -moz-transform:rotate(-90deg); writing-mode:tb-rl;*/}
+.chart-placeholder {width:460px; height:280px; /*border-bottom:1px solid #ccc; border-left:1px solid #ccc;*/ float:left;}
+.chart-legend {float:left;}
+.tickLabel {font-size:12px;}
+
+
+/* buttons */
+.list-buttons {margin-top:30px; list-style:none;}
+.list-buttons li {margin-right:10px; float:left;}
+.list-buttons li a {border:1px solid #812371; padding:6px 8px; display:block; color:#812371; background-color:#F1E2E5; text-decoration:none;}

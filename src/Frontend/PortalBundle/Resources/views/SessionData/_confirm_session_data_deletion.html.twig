@@ -1,0 +1,17 @@
+{% javascripts
+    '@FrontendPortalBundle/Resources/public/js/SessionData/confirm_session_data_deletion.js'
+%}
+<script type="text/javascript" src="{{ asset_url }}"></script>
+
+<script type="text/javascript">
+    ConfirmSessionDataDeletion.i18n = {
+        confirm : "{{ 'dialog.confirm_session_data_deletion.action.confirm' | trans({},'session_data') }}",
+        cancel : "{{ 'dialog.confirm_session_data_deletion.action.cancel' | trans({},'session_data') }}",
+        exportToCsv: "{{ 'action.export_to_csv' | trans({},'session_data') }}"        
+    };   
+</script>
+{% endjavascripts %}
+
+<div id="confirm_session_data_deletion_dialog" title="{{ 'dialog.confirm_session_data_deletion.title' | trans({},'session_data') }}">
+    <p></p>
+</div>

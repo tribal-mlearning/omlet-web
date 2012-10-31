@@ -1,0 +1,41 @@
+#/*
+# * Copyright (c) 2012, TATRC and Tribal
+# * All rights reserved.
+# *
+# * Redistribution and use in source and binary forms, with or without
+# * modification, are permitted provided that the following conditions are met:
+# * * Redistributions of source code must retain the above copyright
+# *   notice, this list of conditions and the following disclaimer.
+# * * Redistributions in binary form must reproduce the above copyright
+# *   notice, this list of conditions and the following disclaimer in the
+# *   documentation and/or other materials provided with the distribution.
+# * * Neither the name of TATRC or TRIBAL nor the
+# *   names of its contributors may be used to endorse or promote products
+# *   derived from this software without specific prior written permission.
+# *
+# * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+# * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+# * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+# * DISCLAIMED. IN NO EVENT SHALL TATRC OR TRIBAL BE LIABLE FOR ANY
+# * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+# * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+# * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+# * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+# * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+# * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+# */
+message.login.alert: This system is for the use of authorized users only. By accessing and using the computer system, you are consenting to system monitoring, including the monitoring of keystrokes. Unauthorized use of, or access to, this computer system may subject you to disciplinary action or criminal prosecution.
+message.login.legal_text: EXTRA LEGAL TEXT
+message.login.user_disabled: This user was disabled and can not access the system.
+message.login.no_privilege: This user doesn't have enough privileges to access this interface
+message.instruction.forgot_password: For forgotten / lost passwords or new accounts contact
+message.instruction.email: <email here>
+
+# global texts
+field.username: Username
+field.password: Password
+field.remember_me: Remember me
+
+#global actions
+actions.login: LOGIN
+version: v0.1

@@ -1,0 +1,23 @@
+ServiceImageBundle:
+    resource: "@ServiceImageBundle/Resources/config/routing.yml"
+    prefix:   /image-layer
+
+ServicePackageBundle:
+    prefix:   /package-layer
+    resource: "@ServicePackageBundle/Resources/config/routing.yml"
+
+ServiceTimeBundle:
+    prefix: time-layer/
+    resource: "@ServiceTimeBundle/Resources/config/routing.yml"
+
+ServiceTrackBundle:
+    prefix: track-layer/
+    resource: "@ServiceTrackBundle/Resources/config/routing.yml"
+
+ServiceUserBundle:
+    prefix: user-layer/
+    resource: "@ServiceUserBundle/Resources/config/routing.yml"
+
+_assetic:
+    resource: .
+    type:     assetic

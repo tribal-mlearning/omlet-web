@@ -1,0 +1,76 @@
+{#/*#}
+{#* Copyright (c) 2012, TATRC and Tribal#}
+{#* All rights reserved.#}
+{#*#}
+{#* Redistribution and use in source and binary forms, with or without#}
+{#* modification, are permitted provided that the following conditions are met:#}
+{#* * Redistributions of source code must retain the above copyright#}
+{#*   notice, this list of conditions and the following disclaimer.#}
+{#* * Redistributions in binary form must reproduce the above copyright#}
+{#*   notice, this list of conditions and the following disclaimer in the#}
+{#*   documentation and/or other materials provided with the distribution.#}
+{#* * Neither the name of TATRC or TRIBAL nor the#}
+{#*   names of its contributors may be used to endorse or promote products#}
+{#*   derived from this software without specific prior written permission.#}
+{#*#}
+{#* THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND#}
+{#* ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED#}
+{#* WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE#}
+{#* DISCLAIMED. IN NO EVENT SHALL TATRC OR TRIBAL BE LIABLE FOR ANY#}
+{#* DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES#}
+{#* (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;#}
+{#* LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND#}
+{#* ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT#}
+{#* (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS#}
+{#* SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.#}
+{#*/#}
+{% extends 'FrontendPortalBundle::layout.html.twig' %}
+
+{% block title %}TrackData{% endblock %}
+
+{% block content %}
+<h1>{{ 'index.first_header' | trans({},'track') }}</h1>
+<!--<h2>TrackData</h2>-->
+<table class="records_list" on
+    <tr>
+		<th colspan="7" class="type">Raw Track Data</th>
+	</tr>
+	<tr>
+		<th width="5%">#</th>
+        <th width="16%">Date</th>
+        <th width="16%">Sender</th>
+        <th width="16%">Object ID</th>
+        <th width="16%">User</th>
+        <th width="16%">Processed</th>
+        <th width="16%">Additional Info</th>
+    </tr>
+
+    <tbody>
+    {% for track in tracks %}
+		<tr class="{{ (loop.index0 is odd)?'odd':'' }} columns-table-tracks">
+			<td>{{ pagination_offset(loop.index) }}</td>
+			<td>{{ track.deviceTimestamp | date('track.datetime_format' | trans({},'track')) }}</td>
+			<td>{{ track.sender }}</td>
+			<td class="excedent-field"><p class="pwordbreak">{{ track.objectId }}</p></td>
+			<td>{{ track.user.username }}</td>
+			<td>{{ track.processStatus }}</td>
+			<td>
+                            <div class="info-field">
+                                <p>{{ track.addInfo }}</p>
+                                <p class="info-field-layer">{{ track.addInfo }}</p>
+                            </div>
+                        </td>
+                </tr>
+    {% endfor %}                         
+    </tbody>
+</table>
+<span class="counter">{{ pagination_counter() }}</span>
+<div class="pagination">	
+	<ul>	
+		{{ pagination_prev('frontend_portal_track_index', null, {'tag':'li'}) }} 
+		{{ pagination_numbers('frontend_portal_track_index', {'tag':'li', 'separator':'','modulus':3}) }}				
+		{{ pagination_next('frontend_portal_track_index', null, {'tag':'li'}) }} 
+	</ul>
+</div>
+<span class="break"><!-- --></span>
+{% endblock %}

@@ -1,0 +1,9 @@
+.description-tasks {display:none;}
+.description-tasks td {border:1px solid #ccc;}
+.description-tasks td div span {float:left; width:33%; text-align:center; }
+.title-tasks {border-bottom:1px solid #ccc; width:100%; padding:3px 0 3px 0;}
+.details-task {padding:3px 0 3px 0;}
+.details-task p {margin:0; padding:0;}
+.details-task .odd {background:#FCEDE5;}
+.details-task p span {padding:2px 0; height:15px;}
+.center-task {border-left:1px solid #ccc; border-right:1px solid #ccc;}

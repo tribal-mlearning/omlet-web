@@ -1,0 +1,108 @@
+#/*
+# * Copyright (c) 2012, TATRC and Tribal
+# * All rights reserved.
+# *
+# * Redistribution and use in source and binary forms, with or without
+# * modification, are permitted provided that the following conditions are met:
+# * * Redistributions of source code must retain the above copyright
+# *   notice, this list of conditions and the following disclaimer.
+# * * Redistributions in binary form must reproduce the above copyright
+# *   notice, this list of conditions and the following disclaimer in the
+# *   documentation and/or other materials provided with the distribution.
+# * * Neither the name of TATRC or TRIBAL nor the
+# *   names of its contributors may be used to endorse or promote products
+# *   derived from this software without specific prior written permission.
+# *
+# * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+# * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+# * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+# * DISCLAIMED. IN NO EVENT SHALL TATRC OR TRIBAL BE LIABLE FOR ANY
+# * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+# * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+# * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+# * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+# * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+# * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+# */
+message.create.success: Course created successfully.
+message.create.fail: Course could not be created.
+message.update.success: Course updated successfully.
+message.update.fail: Course could not be updated.
+message.delete.success: Course deleted successfully.
+message.find.fail: Unable to find Course.
+message.access.denied: User does not have access to this Course.
+message.publish_start.invalid_format: Please, inform a date on correct format
+message.publish_start.alert: "Format: mm/dd/yyyy hh:mm"
+message.metadata.no_course_code: No courseCode provided
+
+# global texts
+page.title: Courses
+field.title: Title
+field.description: Description
+field.owned_by: Owned by
+field.published: Publish
+field.created_at: Created at
+field.updated_at: Updated at
+field.uniqueId: Unique ID
+field.files: Files
+field.file: File
+field.thumbnail: Thumbnail
+field.course_code: Course Code
+field.file.file: File
+field.file.version: Version
+field.file.metadata: Metadata
+field.categories: Categories
+field.metadata: Metadata
+field.publish_start: Publishing starts at
+
+# global actions
+actions.download: Download
+actions.show: Show
+actions.edit: Edit
+actions.delete: Delete
+actions.update: Update
+actions.create: Create
+actions.new: Create new Course
+actions.back: Back to the list
+actions.delete_file: Delete
+actions.add_file: Add File
+actions.add_category: Add Category
+actions.delete_category: Delete
+
+message.confirm.delete: Are you sure?
+message.thumbnail.alert: Thumbnails should be 128 x 128 pixels in JPEG, GIF, PNG format. Any other sizes will be scaled.
+message.file.alert: The file metadata must have the "name=value" format (i.e deviceHeight=300). You can type any name and value. Predefined metadata (deviceHeight, deviceOS, etc) will be suggested and highlighted.
+
+# i18n of index page
+index.first_header: Courses
+index.second_header: Course
+
+index.table.header: Courses
+index.table.column.actions: Actions
+
+# i18n of show page
+show.first_header: Courses
+show.second_header: Course Information
+
+# i18n of edit page
+edit.first_header: Courses
+edit.second_header: Course Editing
+
+# i18n of new page
+new.first_header: Courses
+new.second_header: Course Creation
+
+#formats
+
+#There are many different format types being used because each one is applied in a different situation:
+
+#package.date_format (PHP format): Format rendered to display the date information to the user. http://php.net/manual/pt_BR/function.date.php
+#package.publish_start.server.datetime_format (Symfony2 format): Format accepted on forms. http://userguide.icu-project.org/formatparse/datetime#TOC-Date-Time-Format-Syntax
+#package.publish_start.client.date_format (jQuery UI format): Format of the date on the calendar widget. http://docs.jquery.com/UI/Datepicker/formatDate
+#package.publish_start.client.time_format (jQuery UI format): Format of the time on the calendar widget. http://trentrichardson.com/examples/timepicker/
+
+package.date_format: m/d/Y
+package.datetime_format: m/d/Y H:i:s
+package.publish_start.server.datetime_format: MM/dd/yyyy hh:mm
+package.publish_start.client.date_format: mm/dd/yy
+package.publish_start.client.time_format: hh:mm

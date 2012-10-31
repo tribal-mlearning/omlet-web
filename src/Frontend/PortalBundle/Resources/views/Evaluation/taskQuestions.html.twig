@@ -1,0 +1,25 @@
+{% extends 'FrontendPortalBundle::layout.html.twig' %}
+
+{% block title %}Task report{% endblock %}
+
+{% block content %}
+<h1>Mobile</h1>
+<h2>Task report of {{ task.user.username }}</h2>
+<table>
+	<tr>
+		<th colspan="5" class="type">Answers</th>
+	</tr>
+	<tr>
+		<th>Name</th>
+		<th>Answer</th>
+		<th>Last updated at</th>
+	</tr>
+	{% for question in questions %}	
+	<tr>
+	    <td>{{ question.name }}</td>
+	    <td>{{ (question.skipped)?'SKIPPED':question.answer }}</td>
+	    <td>{{ question.lastUpdatedAt | date('d/m/Y H:i:s') }}</td>
+	</tr>
+	{% endfor %}
+</table>
+{% endblock %}

@@ -1,0 +1,83 @@
+<?xml version="1.0" ?>
+
+<!--* Copyright (c) 2012, TATRC and Tribal-->
+<!--* All rights reserved.-->
+<!--*-->
+<!--* Redistribution and use in source and binary forms, with or without-->
+<!--* modification, are permitted provided that the following conditions are met:-->
+<!--* * Redistributions of source code must retain the above copyright-->
+<!--*   notice, this list of conditions and the following disclaimer.-->
+<!--* * Redistributions in binary form must reproduce the above copyright-->
+<!--*   notice, this list of conditions and the following disclaimer in the-->
+<!--*   documentation and/or other materials provided with the distribution.-->
+<!--* * Neither the name of TATRC or TRIBAL nor the-->
+<!--*   names of its contributors may be used to endorse or promote products-->
+<!--*   derived from this software without specific prior written permission.-->
+<!--*-->
+<!--* THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND-->
+<!--* ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED-->
+<!--* WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE-->
+<!--* DISCLAIMED. IN NO EVENT SHALL TATRC OR TRIBAL BE LIABLE FOR ANY-->
+<!--* DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES-->
+<!--* (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;-->
+<!--* LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND-->
+<!--* ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT-->
+<!--* (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS-->
+<!--* SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.-->
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="core_library_entity.entity_library.class">Core\Library\EntityBundle\Services\EntityLibrary</parameter>
+        <parameter key="package_structure_validator.class">Core\Library\EntityBundle\Constraints\PackageStructureValidator</parameter>
+        <parameter key="publish_constraint_validator.class">Core\Library\EntityBundle\Constraints\PublishConstraintValidator</parameter>
+        <parameter key="pin_validator.class">Core\Library\EntityBundle\Constraints\PinValidator</parameter>
+        <parameter key="count_validator.class">Core\Library\EntityBundle\Constraints\CountValidator</parameter>
+        <parameter key="package_file_not_null_validator.class">Core\Library\EntityBundle\Constraints\PackageFileNotNullValidator</parameter>
+        <parameter key="unique_metadata_validator.class">Core\Library\EntityBundle\Constraints\UniqueMetadataValidator</parameter>
+    </parameters>
+
+    <services>
+        <service id="core.entity_library" class="%core_library_entity.entity_library.class%">
+            <argument type="service" id="doctrine.orm.entity_manager" />
+        </service>
+
+        <service id="validator.unique.package_structure_validator" class="%package_structure_validator.class%">
+            <argument type="service" id="service_package.zip" />
+            <argument type="service" id="translator" />
+            <tag name="validator.constraint_validator" alias="package_structure_validator" />
+        </service>
+        
+        <service id="validator.unique.publish_constraint_validator" class="%publish_constraint_validator.class%">
+            <argument type="service" id="translator" />
+            <tag name="validator.constraint_validator" alias="publish_constraint_validator" />
+        </service>
+        
+        <service id="validator.unique.pin_validator" class="%pin_validator.class%">
+            <argument type="service" id="translator" />
+            <tag name="validator.constraint_validator" alias="pin_validator" />
+        </service>
+
+        <service id="validator.unique.count_validator" class="%count_validator.class%">
+            <argument type="service" id="translator" />
+            <tag name="validator.constraint_validator" alias="count_validator" />
+        </service>
+        
+        <service id="validator.unique.package_file_not_null_validator" class="%package_file_not_null_validator.class%">
+            <argument type="service" id="translator" />
+            <tag name="validator.constraint_validator" alias="package_file_not_null_validator" />
+        </service>
+        
+        <service id="validator.unique.unique_metadata_validator" class="%unique_metadata_validator.class%">
+            <argument type="service" id="translator" />
+            <tag name="validator.constraint_validator" alias="unique_metadata_validator" />
+        </service>        
+        
+        <service id="core.entity_library.package" class="Core\Library\EntityBundle\Entity\Package">
+            <tag name="doctrine.event_listener" event="postPersist"/>
+            <tag name="doctrine.event_listener" event="postUpdate"/>
+        </service>
+    </services>
+</container>

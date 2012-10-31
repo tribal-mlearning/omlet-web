@@ -1,0 +1,51 @@
+{% extends 'FrontendPortalBundle::layout.html.twig' %}
+
+{% block title %}Evaluation{% endblock %}
+{% block js %}
+	{{ parent() }}
+	<script type="text/javascript" charset="utf-8">
+		var BASE_EVALUATION_URL = '{{ path('frontend_portal_evaluation_learnerindex_1') }}';
+	</script>
+{% endblock %}
+
+{% block content %}
+<h1>Mobile</h1>
+<h2>Evaluation</h2>
+    
+<table>
+	<tr>	
+		<td align="right">
+			Country
+		</td>
+		<td colspan="3" class="type">
+			<div class="field-container">
+				<div class="select-container">
+					<select class="select-country">
+						<option value="">Select one country...</option>
+						{% for country in countries %}
+							<option value="{{ country.code }}">{{ country.name }}</option>
+						{% endfor %}
+					</select>
+				</div>
+			</div>	
+		</td>
+	</tr>
+	<tr>
+		<th colspan="4" class="type">Learners</th>
+	</tr>
+	<tr>
+		<th>Name</th>
+		<th>Progress</th>
+		<th>Current Task</th>
+		<th>Last Updated</th>
+	</tr>
+	{% for user in users %}
+    	<tr class="{{ (loop.index0 is odd)?'odd':'' }}">
+    		<td><a href="{{ path('frontend_portal_evaluation_learnertasks', {'hashId': user.hashId}) }}">{{ user.username }}</a></td>
+    		<td>{{ progressOf[user.id] }}%</td>
+    		<td>{{ (currentTaskOf[user.id] == false) ? '-' : currentTaskOf[user.id].name }}</td>
+    		<td>{{ (currentTaskOf[user.id] == false) ? '-' : currentTaskOf[user.id].lastUpdatedAt | date('d/m/Y H:i:s') }}</td>
+    	</tr>
+	{% endfor %}
+</table>	
+{% endblock %}

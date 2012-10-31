@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<!--[if lt IE 7 ]> <html class="no-js ie6 ie" lang="en"> <![endif]-->
+<!--[if IE 7 ]>    <html class="no-js ie7 ie" lang="en"> <![endif]-->
+<!--[if IE 8 ]>    <html class="no-js ie8 ie" lang="en"> <![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!-->
+<html class="no-js" lang="en"> 
+<!--<![endif]-->    
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <link rel="shortcut icon" href="../images/favicon.ico" type="image/x-icon">
+        <title>{% block title %}{% endblock %}</title>
+
+        {% stylesheets filter='cssrewrite'
+            '../app_frontend/Resources/public/css/*'
+            '../app_frontend/Resources/public/css/ui-lightness/*'
+            '../app_frontend/Resources/public/css/jstree-default/*'
+        %}
+        <link rel="stylesheet" href="{{ asset_url }}" />
+        {% endstylesheets %}
+        
+        {% javascripts
+            '../app_frontend/Resources/public/js/jquery-1.7.2.min.js'
+            '../app_frontend/Resources/public/js/jquery.json-2.2.js'
+            '../app_frontend/Resources/public/js/jquery-ui-1.8.21.custom.min.js'
+            '../app_frontend/Resources/public/js/jquery-ui-timepicker-addon.js'
+            '../app_frontend/Resources/public/js/jquery.dataTables.js'
+            '../app_frontend/Resources/public/js/dataTables.fnSetFilteringDelay.js'
+            '../app_frontend/Resources/public/js/jquery.selectboxes.js'
+            '../app_frontend/Resources/public/js/chosen.jquery.js'
+            '../app_frontend/Resources/public/js/tagit.js'
+            '../app_frontend/Resources/public/js/jquery.shiftcheckbox.js'
+        %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+        {% endjavascripts %}
+
+        <script type="text/javascript" src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+        <script type="text/javascript" src="{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}"></script>
+        <script type="text/javascript">
+            var datatables_i18n = {
+                "sProcessing":   "{{ 'sProcessing' | trans({},'datatable') }}",
+                "sLengthMenu":   "{{ 'sLengthMenu' | trans({},'datatable') }}",
+                "sZeroRecords":  "{{ 'sZeroRecords' | trans({},'datatable') }}",
+                "sInfo":         "{{ 'sInfo' | trans({},'datatable') }}",
+                "sInfoEmpty":    "{{ 'sInfoEmpty' | trans({},'datatable') }}",
+                "sInfoFiltered": "{{ 'sInfoFiltered' | trans({},'datatable') }}",
+                "sSearch":       "{{ 'sSearch' | trans({},'datatable') }}",
+                "oPaginate": {
+                    "sFirst":    "{{ 'sFirst' | trans({},'datatable') }}",
+                    "sPrevious": "{{ 'sPrevious' | trans({},'datatable') }}",
+                    "sNext":     "{{ 'sNext' | trans({},'datatable') }}",
+                    "sLast":     "{{ 'sLast' | trans({},'datatable') }}"
+                }
+            };
+
+            $(function() {
+                $('form, label').find('.required').not(":contains('*')").each(function () {
+                    if ($(this).next().attr('type') != 'checkbox') {
+                        current_text = $(this).text();
+                        $(this).text(current_text + ' *');
+                    }
+                });
+            });                
+        </script>
+
+        {% block js %}					
+        {% endblock %}
+    </head>
+
+    <body {% block bodyAttributes %}{% endblock %}>
+        {% block body %}{% endblock %}
+    </body>
+</html>

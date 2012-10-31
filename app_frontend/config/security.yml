@@ -1,0 +1,55 @@
+security:
+    # acl:
+    #     connection: default
+    #     tables:
+    #         class: acl_classes
+    #         entry: acl_entries
+    #         object_identity: acl_obj_ids
+    #         object_identity_ancestors: acl_obj_id_ancestors
+    #         security_identity: acl_security_identities
+    
+    encoders:
+        Core\Library\EntityBundle\Entity\User: 
+            algorithm: sha512
+            iterations: 1
+            encode-as-base64: false
+
+    #role_hierarchy:
+    #     ROLE_ADMIN:       ROLE_USER
+    #     ROLE_SUPER_ADMIN: [ROLE_USER, ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
+
+    providers:
+        core_users:
+            entity: { class: Core\Library\EntityBundle\Entity\User, property: username }
+
+    factories:
+        - "%kernel.root_dir%/../src/Core/Security/RestSecurityBundle/Resources/config/security_factories.xml"
+
+    firewalls:
+        secured_area:
+            pattern:    ^/
+            anonymous: ~
+            http_basic: ~
+            form_login: 
+                login_path:  /login
+                check_path:  /login_check
+                success_handler: core_security_form_security.login.login_success_handler
+            logout:
+                path: /logout
+                target: /
+            remember_me:
+                key:      a0af87r6e5a
+                lifetime: 3600
+                path:     /
+                domain:   ~ 
+
+    access_control:
+        - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/css, roles: IS_AUTHENTICATED_ANONYMOUSLY }  
+        - { path: ^/js, roles: IS_AUTHENTICATED_ANONYMOUSLY }        
+        - { path: ^/images, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: /admin/.*, roles: ROLE_USER_ADMIN }                
+        - { path: ^/, roles: IS_AUTHENTICATED_REMEMBERED }
+        
+        
+        

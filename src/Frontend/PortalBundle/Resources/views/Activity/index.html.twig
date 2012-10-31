@@ -1,0 +1,39 @@
+{% extends 'FrontendPortalBundle::layout.html.twig' %}
+
+{% block title %}Activity{% endblock %}
+
+{% block content %}    
+<h1>Mobile</h1>
+<h2>Activity</h2>
+<table class="records_list">
+	<tr>
+		<th colspan="3" class="type">Object Access Log</th>
+	</tr>
+	<tr>
+		<!-- <th width="5%">#</th> -->
+        <th width="19%">Date</th>
+        <th width="6%">User</th>
+        <th>Description</th>
+    </tr>
+
+    <tbody>
+    {% for objAccessLog in objAccessLogs %}
+		<tr class="{{ (loop.index0 is odd)?'odd':'' }}">
+			<!-- <td>{{ pagination_offset(loop.index) }}</td> -->
+			<td>{{ objAccessLog.createdAt | date('d/m/Y H:i:s') }}</td>
+			<td>{{ objAccessLog.user.username }}</td>
+			<td>Accessed {{ (aliasOf[objAccessLog.objectId] is defined) ? aliasOf[objAccessLog.objectId] : objAccessLog.objectId }} and spent {{ objAccessLog.timeSpent }} seconds(s)</td>
+			</tr>
+    {% endfor %}                         
+    </tbody>
+</table>
+<span class="counter">{{ pagination_counter() }}</span>
+<div class="pagination">	
+	<ul>	
+		{{ pagination_prev('frontend_portal_activity_index', null, {'tag':'li'}) }} 
+		{{ pagination_numbers('frontend_portal_activity_index', {'tag':'li', 'separator':'','modulus':3}) }}				
+		{{ pagination_next('frontend_portal_activity_index', null, {'tag':'li'}) }} 
+	</ul>
+</div>
+<span class="break"><!-- --></span>
+{% endblock %}

@@ -1,0 +1,160 @@
+{% extends 'FrontendPortalBundle::layout.html.twig' %}
+
+{% block title %}{% trans from "session_data" %}page.title{% endtrans %}{% endblock %}
+
+{% block js %}
+    {{ parent() }}
+
+    {% javascripts
+        '@FrontendPortalBundle/Resources/public/js/SessionData/index.js'
+    %}
+    <script type="text/javascript" src="{{ asset_url }}">
+    </script>
+    {% endjavascripts %}
+
+    <script type="text/javascript">
+        $(document).ready(function(){
+            setTimeout(function() {
+                $('input').placeholder();
+            }, 500);
+         });           
+    </script>
+
+    <script type="text/javascript">
+        SessionDataIndex.i18n = {
+            vleSyncStatusErrorMessage : "{{ 'message.verify_vle_sync_status.error' | trans({},'session_data') }}",
+            confirmDeletionMessage: "{{ 'message.confirm_session_data_deletion' | trans({},'session_data') }}",
+            cannotExportMessage: "{{ 'message.can_not_export' | trans({},'session_data') }}",
+            cannotDeleteMessage: "{{ 'message.can_not_delete' | trans({},'session_data') }}"
+        };
+        
+        $(function() {           
+            SessionDataIndex.table = $('#records').dataTable({
+                "oLanguage": datatables_i18n,
+                "bPaginate": true,
+                "bLengthChange": false,
+                "bFilter": true,
+                "bSort": true,
+                "bInfo": true,
+                "bAutoWidth": true,
+                "sDom": '<"dt-top-elements"pif>rt<pif><"dataTables_clear">',
+                "bProcessing": true,
+                "bServerSide": true,
+                "sAjaxSource": "{{ path('session_data_retrieve') }}",
+                "fnServerData": function(url, data, fnCallback) {
+                    $.ajax({
+                        cache: false,
+                        data: data,
+                        url: url,
+                        success: function(json) {
+                            SessionDataIndex.ids = json.ids;
+                            fnCallback(json);
+                        }
+                    });
+                },
+                "fnRowCallback": function(nRow, aData, iDisplayIndex) {
+                    var checkBoxElement = $(nRow).find(".select_single_session_data");
+                    var sessionDataId = checkBoxElement.attr("session_data_id");
+                    if ($.inArray(sessionDataId, SessionDataIndex.selectedIds) == -1) return;
+                    
+                    checkBoxElement.attr("checked", "checked");
+                },
+                "aaSorting": [[ 1, "asc" ]],
+                "aoColumns" : [
+                    { "bSortable" : false, "bSearchable" : false },
+                    null,                    
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null
+                ]
+            }).fnSetFilteringDelay(600);           
+        });
+    </script>
+{% endblock %}
+
+{% block bodyAttributes %}id="session-data-screen"{% endblock %}
+
+
+{% block content %}    
+
+<h1>{{ 'index.first_header' | trans({},'session_data') }}</h1>
+<!--<h2>{{ 'index.second_header' | trans({},'session_data') }}</h2>-->
+
+{% include 'FrontendPortalBundle:SessionData:_confirm_session_data_deletion.html.twig' %}
+{% include 'FrontendPortalBundle:SessionData:_confirm_session_data_not_sent_to_vle.html.twig' %}
+
+{% include 'FrontendPortalBundle::flash_message.html.twig' %}
+
+<table id="records" class="records_list">
+    <thead>
+      	<tr>
+            <th colspan="8" class="type">
+                <div id="session_data_table_header">
+                    <span>{{ 'index.table.header' | trans({},'session_data') }}</span>
+                    {% if hasPermissions('delete', 'session_data') %}
+                        <a id="delete_session_data_button"><img src="/images/icon-del-session-data.png" alt="{{ 'action.delete' | trans({},'session_data') }}" title="{{ 'action.delete' | trans({},'session_data') }}" width="32" height="32"/></a>
+                    {% endif %}
+                    {% if hasPermissions('export', 'session_data') %}
+                        <a id="export_session_data_button"><img src="/images/icon-csv-session-data.png" alt="{{ 'action.export_to_csv' | trans({},'session_data') }}" title="{{ 'action.export_to_csv' | trans({},'session_data') }}" width="32" height="32"/></a>
+                    {% endif %}                       
+                </div>
+            </th>
+       	</tr>
+    	<tr id="filter_session_data_tr">
+            <th></th>
+            <th></th>
+            <th>
+                <select>
+                    <option value="">{{ 'field.all' | trans({},'session_data') }}</option>
+                    {% for mobileUser in mobileUsers %}
+                        <option value="{{ mobileUser.id }}">{{ mobileUser.username }}</option>
+                    {% endfor %}
+                </select>
+            </th>
+            <th>
+                <select class="sd-select-package">
+                    <option value="">{{ 'field.all' | trans({},'session_data') }}</option>
+                    {% for package in packages %}
+                        <option value="{{ package.id }}">{{ package.title }}</option>
+                    {% endfor %}                    
+                </select>
+            </th>
+            <th>
+                <select>
+                    <option value="">{{ 'field.all' | trans({},'session_data') }}</option>
+                    <option value="{{ constant('Core\\Library\\EntityBundle\\Entity\\SessionData::SYNC_SENT_TO_VLE') }}">
+                        {{ 'field.sync_status.send_to_vle' | trans({},'session_data') }}
+                    </option>
+                    <option value="{{ constant('Core\\Library\\EntityBundle\\Entity\\SessionData::SYNC_IN_QUEUE') }}">
+                        {{ 'field.sync_status.in_queue' | trans({},'session_data') }}
+                    </option>
+                    <option value="{{ constant('Core\\Library\\EntityBundle\\Entity\\SessionData::SYNC_DISABLED') }}">
+                        {{ 'field.sync_status.disabled' | trans({},'session_data') }}
+                    </option>
+                </select>
+            </th>
+            <th></th>
+            <th></th>
+            <th></th>
+        </tr>            
+    	<tr>
+            <th><input id="select_all_table_session_data" type="checkbox" /></th>
+            <th>{{ 'field.timestamp' | trans({},'session_data') }}</th>
+            <th>{{ 'field.user' | trans({},'session_data') }}</th>
+            <th>{{ 'field.package' | trans({},'session_data') }}</th>
+            <th>{{ 'field.object_id' | trans({},'session_data') }}</th>
+            <th width="10%">{{ 'field.sync_status' | trans({},'session_data') }}</th>
+            <th>{{ 'field.sync_message' | trans({},'session_data') }}</th>
+            <th>{{ 'field.data' | trans({},'session_data') }}</th>
+        </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+
+<span class="break"><!-- --></span>
+
+{% endblock %}

@@ -1,0 +1,18 @@
+{% javascripts
+    '@FrontendPortalBundle/Resources/public/js/SessionData/confirm_session_data_not_sent_to_vle.js'
+%}
+<script type="text/javascript" src="{{ asset_url }}"></script>
+
+<script type="text/javascript">
+    ConfirmSessionDataNotSentToVle.i18n = {
+        confirm: "{{ 'dialog.session_data_not_sync_with_vle.action.confirm' | trans({},'session_data') }}",
+        cancel: "{{ 'dialog.session_data_not_sync_with_vle.action.cancel' | trans({},'session_data') }}"
+    };	    
+</script>	
+{% endjavascripts %}    
+
+<div id="session_data_not_sync_with_vle_warning_dialog" title="{{ 'dialog.session_data_not_sync_with_vle.title' | trans({},'session_data') }}">
+    <p>
+        {{ 'dialog.session_data_not_sync_with_vle.text' | trans({},'session_data') }}
+    </p>
+</div>

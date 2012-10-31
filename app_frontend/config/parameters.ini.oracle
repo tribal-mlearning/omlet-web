@@ -1,0 +1,16 @@
+[parameters]
+    database_driver   = oci8
+    database_host     = localhost
+    database_port     = 1521
+    database_name     = dbdev
+    database_user     = TRIBALJKO
+    database_password = pentabrasil
+
+    mailer_transport  = smtp
+    mailer_host       = localhost
+    mailer_user       =
+    mailer_password   =
+
+    locale            = en
+
+    secret            = sadlfkLQKpitMemAnEotPa

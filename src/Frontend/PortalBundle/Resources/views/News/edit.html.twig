@@ -1,0 +1,97 @@
+{% extends 'FrontendPortalBundle::layout.html.twig' %}
+
+{% block title %}{% trans from "news" %}page.title{% endtrans %}{% endblock %}
+
+{% block js %}
+    {{ parent() }}
+
+    {% javascripts
+        '@FrontendPortalBundle/Resources/public/js/News/edit.js'
+    %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>   
+    {% endjavascripts %}
+
+    <script type="text/javascript">
+        NewsEdit.countryCount = "{{ edit_form.countries | length }}";
+        NewsEdit.i18n = {
+            deleteCountry : "{{ 'action.delete_country' | trans({},'news') }}"
+        };
+    </script>    
+{% endblock %}
+
+{% block content %}    
+    <h1>{{ 'edit.first_header' | trans({},'news') }}</h1>
+    <h2>{{ 'edit.second_header' | trans({},'news') }}</h2>
+
+    {% include 'FrontendPortalBundle::flash_message.html.twig' %}
+
+    <form action="{{ path('frontend_portal_news_update', { 'id': entity.id }) }}" method="post" {{ form_enctype(edit_form) }}>
+        {{ form_label(edit_form.headline, 'field.headline' | trans({},'news'), { 'attr' : {'class': 'label-i'} }) }}
+        {{ form_widget(edit_form.headline, { 'attr': {'class': 'text'} }) }}
+        <div class="errors">
+            {{ form_errors(edit_form.headline) }}
+        </div>
+        <span class="break"><!-- --></span>
+
+        {{ form_label(edit_form.text, 'field.text' | trans({},'news'), { 'attr' : {'class': 'label-i'} }) }}
+        {{ form_widget(edit_form.text, { 'attr': {'class': 'text'} }) }}
+        <div class="errors">
+            {{ form_errors(edit_form.text) }}
+        </div>
+        <span class="break"><!-- --></span>
+        
+        <img src="/{{ entity.thumbnail.webPath }}" width="50" heigth="50"/>
+        {{ form_label(edit_form.thumbnailContent, 'field.thumbnail' | trans({},'news'), { 'attr' : {'class': 'label-i'} }) }}
+        {{ form_widget(edit_form.thumbnailContent, { 'attr': {'class': 'text'} }) }}
+        <div class="errors">
+            {{ form_errors(edit_form.thumbnailContent) }}
+        </div>
+        <span class="break"><!-- --></span>
+
+        <img src="/{{ entity.image.webPath }}" width="50" heigth="50"/>
+        {{ form_label(edit_form.imageContent, 'field.image' | trans({},'news'), { 'attr' : {'class': 'label-i'} }) }}
+        {{ form_widget(edit_form.imageContent, { 'attr': {'class': 'text'} }) }}
+        <div class="errors">
+            {{ form_errors(edit_form.imageContent) }}
+        </div>
+        <span class="break"><!-- --></span>
+
+        <fieldset class="countries-fieldset">
+            <legend>{{ 'field.countries' | trans({},'news') }}</legend>          
+            
+            <ul class="countries" id="countries-fields-list" data-prototype="{{ form_widget(edit_form.countries.get('prototype')) | e }}">
+                {% for country in edit_form.countries %}
+                <li>
+                    {{ form_widget(country, { 'attr': {'class': 'text'} }) }}
+                    <a class="btn-delete delete-button" href="javascript:;" title="{{ 'action.delete_country' | trans({},'news') }}">x</a>
+                    <span class="break"><!-- --></span>
+                </li>
+                {% endfor %}
+            </ul>
+            
+            <a id="add-country" class="btn150 right" href="javascript:;">{{ 'action.add_country' | trans({},'news') }}</a>
+            <span class="break"></span>
+        </fieldset>    
+        
+        <div class="hidden">
+            {{ form_rest(edit_form) }}
+        </div>        
+        <span class="break"><!-- --></span>
+
+        <a class="big-button submit-button mb20" href="javascript:;" title="Update">{{ 'action.update' | trans({},'news') }}</a>
+        <input type="submit" style="display: none" value="Submit" />
+    </form>
+
+    <ul class="record_actions">
+        <li>
+            <a class="btn150" href="{{ path('frontend_portal_news_index', { 'load_state': 'true' }) }}">
+                {{ 'action.back' | trans({},'news') }}
+            </a>
+        </li>
+        {% if hasPermissions('DELETE', 'NEWS') %}
+            <li>
+                <a href="{{ path('frontend_portal_news_delete', { 'id': entity.id }) }}" class="btn100 submit-button" onclick="return confirm('{{ 'message.delete.confirm' | trans({},'news') }}');">{{ 'action.delete' | trans({},'news') }}</a>
+            </li>
+        {% endif %}
+    </ul>
+{% endblock %}

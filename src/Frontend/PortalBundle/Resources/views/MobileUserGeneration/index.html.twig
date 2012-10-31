@@ -1,0 +1,106 @@
+{#/*#}
+{#* Copyright (c) 2012, TATRC and Tribal#}
+{#* All rights reserved.#}
+{#*#}
+{#* Redistribution and use in source and binary forms, with or without#}
+{#* modification, are permitted provided that the following conditions are met:#}
+{#* * Redistributions of source code must retain the above copyright#}
+{#*   notice, this list of conditions and the following disclaimer.#}
+{#* * Redistributions in binary form must reproduce the above copyright#}
+{#*   notice, this list of conditions and the following disclaimer in the#}
+{#*   documentation and/or other materials provided with the distribution.#}
+{#* * Neither the name of TATRC or TRIBAL nor the#}
+{#*   names of its contributors may be used to endorse or promote products#}
+{#*   derived from this software without specific prior written permission.#}
+{#*#}
+{#* THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND#}
+{#* ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED#}
+{#* WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE#}
+{#* DISCLAIMED. IN NO EVENT SHALL TATRC OR TRIBAL BE LIABLE FOR ANY#}
+{#* DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES#}
+{#* (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;#}
+{#* LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND#}
+{#* ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT#}
+{#* (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS#}
+{#* SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.#}
+{#*/#}
+{% extends 'FrontendPortalBundle::layout.html.twig' %}
+
+{% block title %}{% trans from "mobile_user" %}page.title{% endtrans %}{% endblock %}
+
+{% block js %}
+    {{ parent() }}
+
+	{% javascripts
+		'@FrontendPortalBundle/Resources/public/js/MobileUserGeneration/index.js'
+	%}
+	<script type="text/javascript" src="{{ asset_url }}"></script>
+	{% endjavascripts %}
+{% endblock %}
+
+{% block css %}
+	{{ parent() }}
+	{% stylesheets filter='cssrewrite'
+	    '@FrontendPortalBundle/Resources/public/css/MobileUserGeneration/index.css'
+	%}
+	<link rel="stylesheet" href="{{ asset_url }}" />
+	{% endstylesheets %}
+{% endblock %}
+
+{% block content %}
+	<h1>{{ 'generate.first_header' | trans({},'mobile_user') }}</h1>
+	<h2>{{ 'generate.second_header' | trans({},'mobile_user') }}</h2>
+
+    
+	{% include 'FrontendPortalBundle::flash_message.html.twig' %}
+
+	<form action="{{ path('frontend_portal_mobileusergeneration_generate') }}" method="post">
+		<label class="label-i">{{ 'field.pin_numbers' | trans({},'mobile_user') }}</label>		
+		<textarea id="pin" name="pins" rows="3" cols="25"></textarea>		
+		<a class="big-button submit-button mb20" href="javascript:;" title="{{ 'action.submit_pins' | trans({},'mobile_user') }}">{{ 'action.submit_pins' | trans({},'mobile_user') }}</a>
+	</form>	
+
+	{% if form != null and form.users|length > 0 %}
+		<form action="{{ path('frontend_portal_mobileusergeneration_create') }}" method="post" {{ form_enctype(form) }}>
+
+			{{ form_widget(form._token) }}
+
+			<table class="records_list">
+		    	<tr>
+		    		<th class="type">{{ 'generate.table.title' | trans({},'mobile_user') }}</th>
+		    		<th class="type">		    			
+		    			<select id="state">
+		    				<option value="P">{{ 'state.preactivation' | trans({},'mobile_user') }}</option>
+		    				<option value="A">{{ 'state.activated' | trans({},'mobile_user') }}</option>
+		    				<option value="D">{{ 'state.disabled' | trans({},'mobile_user') }}</option>
+		    			</select>
+		    		</th>
+		    	</tr>
+		        <tr>            
+		            <th width="45%">{{ 'field.username' | trans({},'mobile_user') }}</th>
+		            <th width="20%">{{ 'field.state' | trans({},'mobile_user') }}</th>
+		        </tr>
+			    <tbody>
+			    {% for user in form.users %}
+			        <tr class="{{ (loop.index0 is odd)?'odd':'' }}">
+			            <td>
+			            	{{ form_widget(user.username) }}{{ user.vars.value.username }}
+			            </td>			            
+			            <td>
+                                        {{ form_widget(user.state, { 'attr' : {'class': 'stateField'} }) }} {{ form_errors(user.state) }}
+                                    </td>
+			        </tr>			        			        
+			    {% endfor %}
+			    </tbody>
+			</table>
+		    <a class="big-button submit-button mb20" href="javascript:;" title="{{ 'action.create_mobile_users' | trans({},'mobile_user') }}">{{ 'action.create_mobile_users' | trans({},'mobile_user') }}</a>
+		</form>	
+	{% endif %}
+        <ul class="record_actions">
+            <li>
+                <a class="btn150" href="{{ path('frontend_portal_mobileuser_index', { 'load_state': 'true' }) }}">
+	            {{ 'action.back' | trans({},'mobile_user') }}
+	        </a>
+	    </li>
+        </ul>
+{% endblock %}

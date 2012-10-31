@@ -1,0 +1,78 @@
+#/*
+# * Copyright (c) 2012, TATRC and Tribal
+# * All rights reserved.
+# *
+# * Redistribution and use in source and binary forms, with or without
+# * modification, are permitted provided that the following conditions are met:
+# * * Redistributions of source code must retain the above copyright
+# *   notice, this list of conditions and the following disclaimer.
+# * * Redistributions in binary form must reproduce the above copyright
+# *   notice, this list of conditions and the following disclaimer in the
+# *   documentation and/or other materials provided with the distribution.
+# * * Neither the name of TATRC or TRIBAL nor the
+# *   names of its contributors may be used to endorse or promote products
+# *   derived from this software without specific prior written permission.
+# *
+# * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+# * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+# * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+# * DISCLAIMED. IN NO EVENT SHALL TATRC OR TRIBAL BE LIABLE FOR ANY
+# * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+# * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+# * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+# * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+# * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+# * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+# */
+This value should be false: This value should be false
+This value should be true: This value should be true
+This value should be of type {{ type : This value should be of type {{ type }}
+This value should be blank: This value should be blank
+The value you selected is not a valid choice: The value you selected is not a valid choice
+You must select at least {{ limit }} choices: You must select at least {{ limit }} choices
+You must select at most {{ limit }} choices: You must select at most {{ limit }} choices
+One or more of the given values is invalid: One or more of the given values is invalid
+The fields {{ fields }} were not expected: The fields {{ fields }} were not expected
+The fields {{ fields }} are missing: The fields {{ fields }} are missing
+This value is not a valid date: This value is not a valid date
+This value is not a valid datetime: This value is not a valid datetime
+This value is not a valid email address: This value is not a valid email address
+The file could not be found: The file could not be found
+The file is not readable: The file is not readable
+The file is too large ({{ size }}). Allowed maximum size is {{ limit }}: The file is too large ({{ size }}). Allowed maximum size is {{ limit }}
+The type of the file is invalid ({{ type }}). Allowed types are {{ types }}: The mime type of the file is invalid ({{ type }}). Allowed mime types are {{ types }}
+This value should be {{ limit }} or less: This value should be {{ limit }} or less
+This value is too long. It should have {{ limit }} characters or less: This value is too long. It should have {{ limit }} characters or less
+This value should be {{ limit }} or more: This value should be {{ limit }} or more
+This value is too short. It should have {{ limit }} characters or more: This value is too short. It should have {{ limit }} characters or more
+This value should not be blank: Please complete this field
+This value should not be null: Please complete this field
+This value should be null: This value should be null
+This value is not valid: This value is not valid
+This value is not a valid time: This value is not a valid time
+This value is not a valid URL: This value is not a valid URL
+This form should not contain extra fields: This form should not contain extra fields
+The uploaded file was too large. Please try to upload a smaller file: The uploaded file was too large. Please try to upload a smaller file
+The CSRF token is invalid: The CSRF token is invalid
+The two values should be equal: The two values should be equal
+The file is too large. Allowed maximum size is {{ limit }}: The file is too large. Allowed maximum size is {{ limit }}
+The file is too large: The file is too large
+The file could not be uploaded: The file could not be uploaded
+This value should be a valid number: This value should be a valid number
+This file is not a valid image: This file is not a valid image
+This is not a valid IP address: This is not a valid IP address
+This value is not a valid language: This value is not a valid language
+This value is not a valid locale: This value is not a valid locale
+This value is not a valid country: This value is not a valid country
+
+validation.collection.count.min: You must select at least {{ min }} item(s)
+validation.collection.count.max: You must select at most {{ max }} item(s)
+validation.collection.count.size: You must select {{ size }} item(s)
+validation.package.required_files: The package must contain the package.xml and the package.version
+validation.package.multiple_root_folders: The zip file must have just one folder at its root
+validation.package.unique_id: The package id within the package.xml must correspond to the package Unique ID
+validation.package.not_null: You need to attach a file
+validation.mobile.username: The username size should be between 3 and 8 and it must have only digits
+validation.package.publish_without_files: Course can not be published without attached file
+validation.package.publish_without_date: You need to specify a publishing date
+validation.metadata.duplicated: Duplicated metadata keys are not allowed

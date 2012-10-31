@@ -1,0 +1,21 @@
+FrontendPortalBundle:
+    resource: "@FrontendPortalBundle/Resources/config/routing.yml"
+    prefix:   /
+
+CoreSecurityFormSecurityBundle:
+    resource: "@CoreSecurityFormSecurityBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
+_assetic:
+    resource: .
+    type:     assetic
+
+login_check:
+    pattern:  /login_check
+
+logout:
+    pattern:  /logout
+
+fos_js_routing:
+    resource: "@FOSJsRoutingBundle/Resources/config/routing/routing.xml"

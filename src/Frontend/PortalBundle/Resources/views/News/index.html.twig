@@ -1,0 +1,111 @@
+{% extends 'FrontendPortalBundle::layout.html.twig' %}
+
+{% block title %}{% trans from "news" %}page.title{% endtrans %}{% endblock %}
+
+{% block js %}
+    {{ parent() }}
+    
+    <script type="text/javascript">
+           $(document).ready(function(){
+               setTimeout(function() {
+                   $('input').placeholder();
+               }, 500);
+
+       	});           
+     </script>
+     
+    <script type="text/javascript">
+        $(function(){
+            var load_state = {{ app.request.get('load_state') is null ? "false" : app.request.get('load_state') }};
+
+            $('#records').dataTable( {
+                "oLanguage": datatables_i18n,
+                "bPaginate": true,
+                "bLengthChange": false,
+                "bFilter": true,
+                "bSort": true,
+                "bInfo": true,
+                "bAutoWidth": true,
+                "bStateSave": true,
+                "fnStateLoadParams": function(oSettings, oData) { return load_state; },
+                "sDom": '<"dt-top-elements"pif>t<pi><"dataTables_clear">',
+                "aoColumns" : [
+                    null,
+                    null,
+                    null,
+                    null,
+                    { "bSortable" : false }
+                ]
+            } );
+        });
+    </script>
+{% endblock %}
+
+{% block content %}    
+
+<h1>{{ 'index.first_header' | trans({},'news') }}</h1>
+<!-- <h2>{{ 'index.second_header' | trans({},'news') }}</h2>-->
+
+{% include 'FrontendPortalBundle::flash_message.html.twig' %}
+
+<table id="records" class="records_list">
+    <thead>
+        <tr>
+            <th colspan="5" class="type">{{ 'index.table.title' | trans({},'news') }}</th>
+        </tr>        
+        <tr>
+            <th width="28%">{{ 'field.headline' | trans({},'news') }}</th>
+            <th width="28%">{{ 'field.text' | trans({},'news') }}</th>
+            <th width="12%">{{ 'field.created.by' | trans({},'news') }}</th>
+            <th width="12%">{{ 'field.created.at' | trans({},'news') }}</th>
+            <th width="20%">{{ 'index.table.column.actions' | trans({},'news') }}</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for entity in entities %}
+        <tr class="{{ (loop.index0 is odd)?'odd':'' }}">
+            <td>{{ entity.headline | truncate(30) }}</td>
+            <td>{{ entity.text | truncate(30) }}</td>
+            <td>{{ entity.user.username }}</td>
+            <td>{{ entity.createdAt | date('news.date_format' | trans({},'news')) }}</td>
+            <td>
+                <ul class="icons-ul">
+                    {% if hasPermissions('DELETE', 'NEWS') %}
+                         <li>
+                            <a href="{{ path('frontend_portal_news_delete', { 'id': entity.id }) }}" onclick="return confirm('{{ 'message.delete.confirm' | trans({},'news') }}');">
+                                <img src="/images/delete.png" width="15" height="22" alt="{{ 'action.delete' | trans({},'news') }}" title="{{ 'action.delete' | trans({},'news') }}" />
+                            </a>
+                        </li>
+                    {% endif %}
+                    <li>
+                        <a href="{{ path('frontend_portal_news_show', { 'id': entity.id }) }}">
+                            <img src="/images/show.png" width="24" height="24" alt="{{ 'action.show' | trans({},'news') }}" title="{{ 'action.show' | trans({},'news') }}" />
+                        </a>
+                    </li>
+                    {% if hasPermissions('EDIT', 'NEWS') %}
+                        <li>
+                            <a href="{{ path('frontend_portal_news_edit', { 'id': entity.id }) }}">
+                                <img src="/images/edit.png" width="22" height="22" alt="{{ 'action.edit' | trans({},'news') }}" title="{{ 'action.edit' | trans({},'news') }}" />
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+<span class="break"><!-- --></span>
+{% if hasPermissions('CREATE', 'NEWS') %}
+    <div class="record_actions_div">
+        <ul class="record_actions">
+            <li>
+                <a class="btn-create-new" href="{{ path('frontend_portal_news_new') }}">
+                    {{ 'action.new' | trans({},'news') }}
+                </a>
+            </li>
+        </ul>
+    </div>
+{% endif %}
+{% endblock %}

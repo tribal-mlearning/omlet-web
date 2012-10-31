@@ -1,0 +1,42 @@
+{% extends 'FrontendPortalBundle::layout.html.twig' %}
+
+{% block title %}Learner tasks{% endblock %}
+
+{% block content %}
+<h1>Mobile</h1>
+<h2>Learner Tasks</h2>
+<table>
+	<tr>
+		<th colspan="3" class="type">Tasks</th>
+	</tr>
+	<tr>
+		<th width="70%">Name</th>
+		<th>Status</th>
+		<th>Last updated at</th>
+	</tr>
+	{% for task in tasks %}	
+    	<tr class="{{ (loop.index0 is odd)?'odd':'' }}">	
+    	    <td><a href="javascript:;" class="task-button" rel="{{ task.name }} "><span>+</span> {{ task.name }}</a></td>
+    	    <td>{{ (task.status == task.valueOf('STATUS_IN_PROGRESS'))?'IN PROGRESS':'CLOSED' }}</td>
+    	    <td>{{ task.lastUpdatedAt | date('d/m/Y H:i:s') }}</td>
+    	    <!-- <td><a href="{{ path('frontend_portal_evaluation_taskquestions', {'appName': 'mole', 'taskId': task.id}) }}">View questions</a></td> -->
+    	</tr>
+    	<tr class="description-tasks" id="{{ task.name }}">
+    	    <td  colspan="3" >
+				<div class="title-tasks">
+					<span><b>Question</b></span> <span class="center-task"><b>Answer</b></span> <span><b>Date</b></span>
+					<br clear="all" />
+				</div>	
+				<div class="details-task">
+					{% for question in task.questions %}
+						<p class="{{ (loop.index0 is odd)?'odd':'' }}">
+							<span>{{ question.name }} </span><span class="center-task">{{ (question.skipped)?'SKIPPED':question.answer }} </span><span> {{ question.lastUpdatedAt | date('d/m/Y H:i:s') }}</span>
+							<br clear="all" />
+						</p>
+					{% endfor %}
+				</div>
+    	    </td>
+    	</tr>
+	{% endfor %}
+</table>
+{% endblock %}

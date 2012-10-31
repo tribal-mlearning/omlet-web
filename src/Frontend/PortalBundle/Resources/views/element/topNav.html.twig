@@ -1,0 +1,142 @@
+{#/*#}
+{#* Copyright (c) 2012, TATRC and Tribal#}
+{#* All rights reserved.#}
+{#*#}
+{#* Redistribution and use in source and binary forms, with or without#}
+{#* modification, are permitted provided that the following conditions are met:#}
+{#* * Redistributions of source code must retain the above copyright#}
+{#*   notice, this list of conditions and the following disclaimer.#}
+{#* * Redistributions in binary form must reproduce the above copyright#}
+{#*   notice, this list of conditions and the following disclaimer in the#}
+{#*   documentation and/or other materials provided with the distribution.#}
+{#* * Neither the name of TATRC or TRIBAL nor the#}
+{#*   names of its contributors may be used to endorse or promote products#}
+{#*   derived from this software without specific prior written permission.#}
+{#*#}
+{#* THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND#}
+{#* ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED#}
+{#* WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE#}
+{#* DISCLAIMED. IN NO EVENT SHALL TATRC OR TRIBAL BE LIABLE FOR ANY#}
+{#* DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES#}
+{#* (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;#}
+{#* LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND#}
+{#* ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT#}
+{#* (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS#}
+{#* SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.#}
+{#*/#}
+{% set loggedUser = app.security.getToken().getUser() %}
+
+{% set navEntries = [
+    {
+        'title': 'menu.package' | trans({},'top_nav'),
+        'route': {
+            'name': 'frontend_portal_package_index',
+            'permission': {
+               'name': 'view',
+               'context': 'package'
+            }
+        }
+    },
+    {
+        'title': 'menu.track' | trans({},'top_nav'),
+        'route': {
+            'name': 'frontend_portal_track_index',
+            'permission': {
+               'name': 'view',
+               'context': 'track_data'
+            }
+        }
+    },
+    {
+        'title': 'menu.mobile_user_management' | trans({},'top_nav'),
+        'route': {
+            'name': 'frontend_portal_mobileuser_index',
+            'permission': {
+               'name': 'view',
+               'context': 'user'
+            }
+        }
+    },
+    {
+        'title': 'menu.portal_user_management' | trans({},'top_nav'),
+        'route': {
+            'name': 'frontend_portal_user_index',
+            'permission': {
+               'name': 'view',
+               'context': 'user'
+            }
+        }
+    },
+	{
+        'title': 'menu.role_management' | trans({},'top_nav'), 
+        'route': {
+            'name': 'frontend_portal_role_index',
+            'permission': {
+               'name': 'view',
+               'context': 'access_control'
+            }
+        }
+    },
+    {
+        'title': 'menu.course_category' | trans({},'top_nav'), 
+        'route': {
+            'name': 'frontend_portal_coursecategory_index',
+            'permission': {
+               'name': 'view',
+               'context': 'course_category'
+            }
+        }
+    }
+]
+%}
+
+{% block js %}
+    {% javascripts
+        '@FrontendPortalBundle/Resources/public/js/element/topNav.js'
+    %}
+
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+
+    {% endjavascripts %}
+{% endblock %}
+
+{% include 'FrontendPortalBundle::_change_password_dialog.html.twig' %}
+
+<div id="nav">
+    <ul>
+        {% for entry in navEntries %}    
+            {% if entry.route.permission is not defined or hasPermissions(entry.route.permission.name, entry.route.permission.context) %}
+            {% set liClass = '' %}
+            {% if loop.index0 == 0 %}
+                {% set liClass = 'first' %}
+            {% elseif loop.revindex0 == 0 %}
+                {% set liClass = 'last-li-nav' %}
+            {% endif %}
+            {% if app.request.attributes.get('_route') == entry.route.name %}
+                {% set liClass = liClass ~ ' active' %}
+            {% endif %}
+            {% if liClass != '' %}
+                {% set liClass = 'class="' ~ liClass ~ '"'%}
+            {% endif %}
+                <li {{ liClass | raw }}><a href="{{ path(entry.route.name) }}" title="{{ entry.title }}">{{ entry.title }}</a></li>    					
+            {% endif %}
+        {% endfor %}
+    </ul>
+</div>
+
+<div id="div-logo-header"><!-- --></div>
+
+<div id="user-info">
+    <div class="left">
+        <span class="block">{{ 'message.welcome_back' | trans({},'top_nav') }}, <a id="name-logged-user" href="javascript:;">{{ loggedUser.username }}</a></span>
+        <small>
+            {{ 'message.last_login' | trans({},'top_nav') }} {{ app.session.get('lastLogin') | date('last_login.date_format' | trans({},'top_nav')) }}
+        </small>
+        <small>
+            <a id="change_password_button">{{ 'action.change_password' | trans({},'top_nav') }}</a>
+        </small>
+    </div>
+    <a class="button" href="{{ path('logout') }}" title="{{ 'action.logout' | trans({},'top_nav') }}">{{ 'action.logout' | trans({},'top_nav') }}</a>
+</div>
+
+<span class="break"><!-- --></span>

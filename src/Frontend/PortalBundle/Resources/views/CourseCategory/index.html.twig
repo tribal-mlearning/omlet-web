@@ -1,0 +1,192 @@
+{#/*#}
+{#* Copyright (c) 2012, TATRC and Tribal#}
+{#* All rights reserved.#}
+{#*#}
+{#* Redistribution and use in source and binary forms, with or without#}
+{#* modification, are permitted provided that the following conditions are met:#}
+{#* * Redistributions of source code must retain the above copyright#}
+{#*   notice, this list of conditions and the following disclaimer.#}
+{#* * Redistributions in binary form must reproduce the above copyright#}
+{#*   notice, this list of conditions and the following disclaimer in the#}
+{#*   documentation and/or other materials provided with the distribution.#}
+{#* * Neither the name of TATRC or TRIBAL nor the#}
+{#*   names of its contributors may be used to endorse or promote products#}
+{#*   derived from this software without specific prior written permission.#}
+{#*#}
+{#* THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND#}
+{#* ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED#}
+{#* WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE#}
+{#* DISCLAIMED. IN NO EVENT SHALL TATRC OR TRIBAL BE LIABLE FOR ANY#}
+{#* DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES#}
+{#* (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;#}
+{#* LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND#}
+{#* ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT#}
+{#* (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS#}
+{#* SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.#}
+{#*/#}
+{% extends 'FrontendPortalBundle::layout.html.twig' %}
+
+{% block title %}{% trans from "course_category" %}page.title{% endtrans %}{% endblock %}
+
+{% block js %}
+    {{ parent() }}
+
+    {% javascripts
+        '../app_frontend/Resources/public/js/jquery.jstree.js'
+    %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+    
+    <script type="text/javascript">
+        var deleteConfirm = "{{ 'message.delete.confirm' | trans({},'course_category') }}";
+        var generalError = "{{ 'message.error.general' | trans({},'course_category') }}";        
+        var i18n = {
+            createLabel: "{{ 'action.create' | trans({},'course_category') }}",
+            renameLabel: "{{ 'action.rename' | trans({},'course_category') }}",
+            deleteLabel: "{{ 'action.delete' | trans({},'course_category') }}",
+        };
+        var operation = 0;
+        
+        function addOperation() {
+            operation++;
+            $("#saving_message").show();
+        }
+        
+        function removeOperation() {
+            operation--;
+            if (operation == 0) $("#saving_message").hide();
+        }
+
+        $(function () {
+            $("#course_categories")            
+                .jstree({
+                    "core": { 
+                        "animation": 100 
+                    },
+                    "plugins": [ "themes", "json_data", "ui", "crrm", "contextmenu" ],
+                    "ui" : { 
+                        "select_multiple_modifier" : false
+                    },
+                    "contextmenu": {
+                        "select_node": true,
+                        "items": function(node) {
+                            if (!$(node).attr("id")) return null;
+
+                            {% set items = ['CREATE', 'EDIT', 'DELETE'] %}
+
+                            var items = {
+                                {% for item in items %}
+                                    {% if hasPermissions(item, 'COURSE_CATEGORY') %}
+                                        {% set optionName = (item == 'EDIT') ? 'rename' : (item | lower) %}
+                                        {% set methodName = (item == 'EDIT') ? 'rename' : ((item == 'DELETE') ? 'remove' : (item | lower)) %}
+                                        "{{ optionName }}Item": {
+                                            label: i18n.{{ optionName }}Label,
+                                            separator_after: {{ (loop.last) ? 'false' : 'true' }},
+                                            action: function () { this.{{ methodName }}(node); }
+                                        }{{ (not loop.last) ? ',' : '' }}
+                                    {% endif %}
+                                {% endfor %}
+                            };
+
+                            if ($(node).attr("id") == -1) {
+                                delete items.deleteItem;
+                                delete items.renameItem;
+                            }
+
+                            return items;                            
+                        }
+                    },
+                    "themes": {
+                        "dots": false
+                    },
+                    "json_data": {
+                        "ajax": {
+                            "url": Routing.generate("course_category_retrieve")
+                        }
+                    }
+                })
+                .bind("loaded.jstree", function (event, data) {
+                    $(this).jstree("open_all");
+                })             
+                .bind("before.jstree", function (e, data) {                    
+                    var deleteNotConfirmed = data.func === "remove" && !confirm(deleteConfirm);
+                    
+                    if (deleteNotConfirmed) {
+                        e.stopImmediatePropagation();
+                        return false;
+                    }
+                })
+                .bind("create.jstree", function(e, data) {
+                    addOperation();
+                    
+                    $.post("create", { "parent_id" : $(data.rslt.parent).attr("id"), "name" : data.rslt.name })
+                        .success(function(r) {
+                            if (r.status) $(data.rslt.obj).attr("id", r.id);
+                            else $.jstree.rollback(data.rlbk);
+                            
+                            if (r.message) alert(r.message);
+                        })
+                        .error(function(r) {
+                            $.jstree.rollback(data.rlbk);
+                            alert(generalError);
+                        })
+                        .complete(function(){
+                            removeOperation();
+                        });
+                })
+                .bind("remove.jstree", function(e, data) {        
+                    addOperation();
+                    
+                    $.get("delete/" + $(data.rslt.obj).attr("id"))
+                        .success(function(r) {
+                            if (!r.status) data.inst.refresh();
+                            
+                            if (r.message) alert(r.message);
+                        })                    
+                        .error(function(r) {
+                            data.inst.refresh();
+                            alert(generalError);
+                        })
+                        .complete(function(){
+                            removeOperation();
+                        });
+                })
+                .bind("rename.jstree", function(e, data) {
+                    addOperation();
+                    
+                    $.post("update/" + $(data.rslt.obj).attr("id"), { "name" : data.rslt.new_name })
+                        .success(function(r) {
+                            if (!r.status) $.jstree.rollback(data.rlbk);
+                            
+                            if (r.message) alert(r.message);
+                        })                    
+                        .error(function(r) {
+                            $.jstree.rollback(data.rlbk);
+                            alert(generalError);
+                        })
+                        .complete(function(){
+                            removeOperation();
+                        });
+                })
+            });
+    </script>
+{% endblock %}
+
+{% block content %}    
+    
+<h1>{{ 'index.first_header' | trans({},'course_category') }}</h1>
+
+<br />
+<br />
+
+<div style="height: 20px">
+    <span style="vertical-align: top">{{ 'message.categories.alert' | trans({},'course_category') }}</span>
+    <span id="saving_message" style="display: none; vertical-align: top">{{ 'message.saving' | trans({},'course_category') }}<img id="create_organisation_dialog_image" src="/images/throbber.gif" /></span>
+</div>
+
+<p class="field_note"></p>
+
+<ul id="course_categories">
+</ul>
+
+{% endblock %}

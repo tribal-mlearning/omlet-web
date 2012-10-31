@@ -1,0 +1,91 @@
+{% extends 'FrontendPortalBundle::layout.html.twig' %}
+
+{% block title %}{% trans from "news" %}page.title{% endtrans %}{% endblock %}
+
+{% block js %}
+    {{ parent() }}
+
+	{% javascripts
+		'@FrontendPortalBundle/Resources/public/js/News/new.js'
+	%}
+	<script type="text/javascript" src="{{ asset_url }}"></script>	
+	{% endjavascripts %}
+    <script type="text/javascript">
+    	var countryCount = "{{ form.countries | length }}";
+        var i18n = {
+            label : {
+                delete_country : "{{ 'action.delete_country' | trans({},'news') }}"
+            }
+        };
+    </script>   	
+{% endblock %}
+
+{% block content %}
+    <h1>{{ 'new.first_header' | trans({},'news') }}</h1>
+    <h2>{{ 'new.second_header' | trans({},'news') }}</h2>
+
+    {% include 'FrontendPortalBundle::flash_message.html.twig' %}
+
+	<form action="{{ path('frontend_portal_news_create') }}" method="post" {{ form_enctype(form) }}>
+		{{ form_label(form.headline, 'field.headline' | trans({},'news'), { 'attr' : {'class': 'label-i'} }) }}
+	    {{ form_widget(form.headline, { 'attr': {'class': 'text'} }) }}
+		<div class="errors">
+			{{ form_errors(form.headline) }}
+		</div>
+	    <span class="break"><!-- --></span>
+
+		{{ form_label(form.text, 'field.text' | trans({},'news'), { 'attr' : {'class': 'label-i'} }) }}
+	    {{ form_widget(form.text, { 'attr': {'class': 'text'} }) }}
+		<div class="errors">
+			{{ form_errors(form.text) }}
+		</div>
+	    <span class="break"><!-- --></span>
+            
+            {{ form_label(form.thumbnailContent, 'field.thumbnail' | trans({},'news'), { 'attr' : {'class': 'label-i'} }) }}
+            {{ form_widget(form.thumbnailContent, { 'attr': {'class': 'text'} }) }}
+            <div class="errors">
+                {{ form_errors(form.thumbnailContent) }}
+            </div>
+            <span class="break"><!-- --></span>            
+
+		{{ form_label(form.imageContent, 'field.image' | trans({},'news'), { 'attr' : {'class': 'label-i'} }) }}
+	    {{ form_widget(form.imageContent, { 'attr': {'class': 'text'} }) }}
+		<div class="errors">
+			{{ form_errors(form.imageContent) }}
+		</div>
+	    <span class="break"><!-- --></span>	    	    	    	   
+
+		<fieldset class="countries-fieldset">
+			<legend>{{ 'field.countries' | trans({},'news') }}</legend>			
+	    	
+			<ul class="countries" id="countries-fields-list" data-prototype="{{ form_widget(form.countries.get('prototype')) | e }}">
+                {% for country in form.countries %}
+                <li>
+                    {{ form_widget(country, { 'attr': {'class': 'text'} }) }}
+                    <a class="btn-delete delete-button" href="javascript:;" title="{{ 'action.delete_country' | trans({},'news') }}">x</a>
+                    <span class="break"><!-- --></span>
+                </li>
+                {% endfor %}				
+		    </ul>
+			<span class="break"></span>
+			<a id="add-country" class="btn150 right" href="javascript:;">{{ 'action.add_country' | trans({},'news') }}</a>
+			<span class="break"></span>
+		</fieldset>
+
+		<div class="hidden">
+	  		{{ form_rest(form) }}
+		</div>
+		<span class="break"><!-- --></span>		
+		
+	    <a style="clear: both" class="big-button submit-button mb20" href="javascript:;" title="{{ 'action.create' | trans({},'news') }}">{{ 'action.create' | trans({},'news') }}</a>
+            <input type="submit" style="display: none" value="Submit" />
+	</form>	
+
+	<ul class="record_actions">
+	    <li>
+	        <a class="btn150" href="{{ path('frontend_portal_news_index') }}">
+	            {{ 'action.back' | trans({},'news') }}
+	        </a>
+	    </li>
+	</ul>
+{% endblock %}

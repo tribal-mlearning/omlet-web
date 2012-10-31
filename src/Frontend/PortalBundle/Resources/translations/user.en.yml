@@ -1,0 +1,112 @@
+#/*
+# * Copyright (c) 2012, TATRC and Tribal
+# * All rights reserved.
+# *
+# * Redistribution and use in source and binary forms, with or without
+# * modification, are permitted provided that the following conditions are met:
+# * * Redistributions of source code must retain the above copyright
+# *   notice, this list of conditions and the following disclaimer.
+# * * Redistributions in binary form must reproduce the above copyright
+# *   notice, this list of conditions and the following disclaimer in the
+# *   documentation and/or other materials provided with the distribution.
+# * * Neither the name of TATRC or TRIBAL nor the
+# *   names of its contributors may be used to endorse or promote products
+# *   derived from this software without specific prior written permission.
+# *
+# * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+# * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+# * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+# * DISCLAIMED. IN NO EVENT SHALL TATRC OR TRIBAL BE LIABLE FOR ANY
+# * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+# * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+# * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+# * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+# * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+# * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+# */
+message.create.success: User created successfully.
+message.create.fail: User could not be created.
+message.create.fail.invalid_username: "Invalid username: The username should be composed by digits only and its size should be between 3 and 8."
+message.update.success: User updated successfully.
+message.update.fail: User could not be updated.
+message.delete.confirm: Are you sure you want to delete?
+message.delete.success: User deleted successfully.
+message.delete.fail: "Can't delete user: {{currentId}} \n {{message}} \n"
+message.delete.fail.user_has_packages: "Can't delete user: The user course(s) assigned to him."
+message.delete.fail.user_is_logged_in: "Can't delete user: The user is currently logged in."
+message.find.fail: Unable to find User.
+message.update.password.fail.size: The new password must have at least 6 characters.
+message.update.password.fail.not_matching.current: The entered password does not match the current one.
+message.update.password.fail.not_matching.verification: Verify password does not match.
+
+message.mobile.create.success: User(s) created successfully.
+message.mobile.create.fail: User(s) could not be created.
+message.mobile.generate.info.existing_usernames: "The following users already exists and will not be created: {{users}}"
+message.mobile.generate.info.invalid_pins: "The following PINs are invalid and will not be used: {{pins}}"
+
+# global texts
+page.title: User Management
+field.username: Username
+field.state: State
+field.organization: Organization
+field.password: Password
+field.roles: Roles
+field.metadata: Metadata
+field.metadata.name: Name
+field.metadata.value: Value
+
+organisation.choose: Choose an Organization
+state.preactivation: Pre-activation
+state.activated: Activated
+state.disabled: Disabled
+
+# global actions
+action.new: Create a new user
+action.show: Show
+action.edit: Edit
+action.create: Create
+action.update: Save
+action.delete: Delete
+action.back: Back to the list
+action.generate: Generate mobile users by PIN numbers
+action.add_metadata: Add Metadata
+action.delete_metadata: Delete
+
+# i18n of index page
+index.table.column.actions: Actions
+index.table.title: Users
+index.first_header: Web users
+index.second_header: Management
+
+# i18n of show page
+show.first_header: Web users
+show.second_header: Detail
+
+# i18n of edit page
+edit.first_header: Web users
+edit.second_header: Edit
+
+# i18n of new page
+new.first_header: Web users
+new.second_header: Create
+
+# i18n of 'Choose New Package Owner' dialog
+dialog.choose_new_package_owner.text: The user selected for deletion has course(s) assigned to him. Choose another user to keep the course(s).
+dialog.choose_new_package_owner.action.confirm: Confirm
+dialog.choose_new_package_owner.action.cancel: Cancel
+dialog.choose_new_package_owner.title: Choose new Course owner
+dialog.choose_new_package_owner.action.delete.confirm: Are you sure?
+
+# i18n of 'Create Organisation' dialog
+dialog.create_organisation.field.name: Name
+dialog.create_organisation.action.confirm: Confirm
+dialog.create_organisation.action.cancel: Cancel
+dialog.create_organisation.title: Create new Organization
+
+# i18n of 'Change Password' dialog
+dialog.change_password.field.current: Current Password
+dialog.change_password.field.new: New Password (at least 6 characters)
+dialog.change_password.field.verification: Confirm new Password (at least 6 characters)
+dialog.change_password.action.confirm: Confirm
+dialog.change_password.action.cancel: Cancel
+dialog.change_password.title: Change Password

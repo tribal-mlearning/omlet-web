@@ -1,0 +1,91 @@
+{#/*#}
+{#* Copyright (c) 2012, TATRC and Tribal#}
+{#* All rights reserved.#}
+{#*#}
+{#* Redistribution and use in source and binary forms, with or without#}
+{#* modification, are permitted provided that the following conditions are met:#}
+{#* * Redistributions of source code must retain the above copyright#}
+{#*   notice, this list of conditions and the following disclaimer.#}
+{#* * Redistributions in binary form must reproduce the above copyright#}
+{#*   notice, this list of conditions and the following disclaimer in the#}
+{#*   documentation and/or other materials provided with the distribution.#}
+{#* * Neither the name of TATRC or TRIBAL nor the#}
+{#*   names of its contributors may be used to endorse or promote products#}
+{#*   derived from this software without specific prior written permission.#}
+{#*#}
+{#* THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND#}
+{#* ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED#}
+{#* WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE#}
+{#* DISCLAIMED. IN NO EVENT SHALL TATRC OR TRIBAL BE LIABLE FOR ANY#}
+{#* DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES#}
+{#* (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;#}
+{#* LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND#}
+{#* ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT#}
+{#* (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS#}
+{#* SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.#}
+{#*/#}
+{% extends 'FrontendPortalBundle::layout.html.twig' %}
+
+{% block js %}
+{{ parent() }}
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        setTimeout(function () {
+            $('input').placeholder();
+        }, 500);
+    });
+</script>
+
+{% endblock %}
+
+{% block bodyAttributes %}id="login-page"{% endblock %}
+
+{% block body %}
+<div id="box-login">
+    <form action="{{ path('login_check') }}" method="post">
+        <fieldset>
+            <div class="mobile-logo"><!-- --></div>
+            <div class="login-input-div">
+                <input id="username" class="text" type="text" name="_username" value="{{ last_username }}"
+                       placeholder="Username" maxlength="37"/>
+                <input id="password" class="text input-password" type="password" name="_password" placeholder="Password"
+                       maxlength="37"/>
+
+                <div class="break"><!-- --></div>
+
+                <input type="checkbox" id="remember_me" name="_remember_me"/>
+                <label for="remember_me" id="remember-text">{{ 'field.remember_me' | trans({},'login') }}</label>
+            </div>
+            <div class="break"><!-- --></div>
+
+            {% if error %}
+            <span class="form-error">{{ error.message }}</span>
+            {% endif %}
+
+            <a class="button submit-button" href="javascript:;" title="{{ 'actions.login' | trans({},'login') }}">
+                {{ 'actions.login' | trans({},'login') }}
+            </a>
+
+            <div class="line"><!-- --></div>
+            <div id="login-message">
+                <span>{{ 'message.login.alert' | trans({},'login') }}</span>
+            </div>
+
+            <div class="line"><!-- --></div>
+            {#<div id="legal-message">#}
+                {#<span>{{ 'message.login.legal_text' | trans({},'login') }}</span>#}
+            {#</div>#}
+
+            {#<div class="line"><!-- --></div>#}
+            {#<p class="forgot-pass-text">{{ 'message.instruction.forgot_password' | trans({},'login') }}#}
+                {#<a href="javascript:;"> {{ 'message.instruction.email' | trans({},'login') }}</a>#}
+            {#</p>#}
+
+            <p class="version-text">{{ 'version' | trans({},'login') }}</p>
+
+            <input type="hidden" name="_target_path" value="{{ url('frontend_portal_package_index') }}"/>
+        </fieldset>
+    </form>
+</div>
+{% endblock %}

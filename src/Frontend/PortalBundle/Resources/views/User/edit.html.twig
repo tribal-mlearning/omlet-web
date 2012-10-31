@@ -1,0 +1,165 @@
+{#/*#}
+{#* Copyright (c) 2012, TATRC and Tribal#}
+{#* All rights reserved.#}
+{#*#}
+{#* Redistribution and use in source and binary forms, with or without#}
+{#* modification, are permitted provided that the following conditions are met:#}
+{#* * Redistributions of source code must retain the above copyright#}
+{#*   notice, this list of conditions and the following disclaimer.#}
+{#* * Redistributions in binary form must reproduce the above copyright#}
+{#*   notice, this list of conditions and the following disclaimer in the#}
+{#*   documentation and/or other materials provided with the distribution.#}
+{#* * Neither the name of TATRC or TRIBAL nor the#}
+{#*   names of its contributors may be used to endorse or promote products#}
+{#*   derived from this software without specific prior written permission.#}
+{#*#}
+{#* THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND#}
+{#* ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED#}
+{#* WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE#}
+{#* DISCLAIMED. IN NO EVENT SHALL TATRC OR TRIBAL BE LIABLE FOR ANY#}
+{#* DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES#}
+{#* (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;#}
+{#* LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND#}
+{#* ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT#}
+{#* (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS#}
+{#* SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.#}
+{#*/#}
+{% extends 'FrontendPortalBundle::layout.html.twig' %}
+
+{% block title %}{% trans from "user" %}page.title{% endtrans %}{% endblock %}
+
+{% block js %}
+    {{ parent() }}
+
+	{% javascripts
+	    '@FrontendPortalBundle/Resources/public/js/User/index.js'
+            '@FrontendPortalBundle/Resources/public/js/User/edit.js'
+	%}
+	<script type="text/javascript" src="{{ asset_url }}"></script>	
+	{% endjavascripts %}
+
+	<script type="text/javascript">
+            UserIndex.i18n = {
+                confirmDelete : "{{ 'message.delete.confirm' | trans({},'user') }}"
+            };         
+            
+	    UserEdit.metadataCount = '{{ edit_form.userMetadatas | length }}';
+            UserEdit.i18n = {
+                delete_metadata : "{{ 'action.delete_metadata' | trans({},'user') }}"
+            };
+	</script>
+{% endblock %}
+
+{% block css %}
+	{{ parent() }}
+	{% stylesheets filter='cssrewrite'
+	    '@FrontendPortalBundle/Resources/public/css/User/edit.css'
+	%}
+	<link rel="stylesheet" href="{{ asset_url }}" />
+	{% endstylesheets %}
+{% endblock %}
+
+{% block content %}    
+	<h1>{{ 'edit.first_header' | trans({},'user') }}</h1>
+	<h2>{{ 'edit.second_header' | trans({},'user') }}</h2>
+
+    {% include 'FrontendPortalBundle::_choose_new_package_owner_dialog.html.twig' %}
+
+    {% include 'FrontendPortalBundle::_create_organisation_dialog.html.twig' %}
+
+    {% include 'FrontendPortalBundle::flash_message.html.twig' %}
+
+    {{ form_errors(edit_form) }}
+
+	<form action="{{ path('frontend_portal_user_update', { 'id': entity.id }) }}" method="post" {{ form_enctype(edit_form) }}>
+	   	{{ form_label(edit_form.username, 'field.username' | trans({},'user'), { 'attr' : {'class': 'label-i'} }) }}
+	    {{ form_widget(edit_form.username, { 'attr': {'class': 'text'} }) }}
+		<div class="errors">
+			{{ form_errors(edit_form.username) }}
+		</div>
+	    <span class="break"><!-- --></span>
+	    
+		{{ form_label(edit_form.password, 'field.password' | trans({},'user'), { 'attr' : {'class': 'label-i'} }) }}
+	    {{ form_widget(edit_form.password, { 'attr': {'class': 'text'}, 'type': 'password'} ) }}
+		<div class="errors">
+	    	{{ form_errors(edit_form.password) }}
+		</div>
+	    <span class="break"><!-- --></span>
+
+	    {{ form_label(edit_form.state, 'field.state' | trans({},'user'), { 'attr' : {'class': 'label-i'} }) }}
+	    {{ form_widget(edit_form.state, { 'attr': {'class': 'text'} }) }}
+		<div class="errors">
+			{{ form_errors(edit_form.state) }}
+		</div>
+	    <span class="break"><!-- --></span>	    
+	    
+	    {{ form_label(edit_form.organisation, 'field.organization' | trans({},'user'), { 'attr' : {'class': 'label-i'} }) }}
+	    {{ form_widget(edit_form.organisation, { 'attr': {'class': 'text'} }) }}
+	    <img id="create_organisation_dialog_image" src="/images/add.png" />
+		<div class="errors">
+			{{ form_errors(edit_form.organisation) }}
+		</div>
+	    <span class="break"><!-- --></span>
+
+	    {{ form_label(edit_form.userRoles, 'field.roles' | trans({},'user'), { 'attr' : {'class': 'label-i'} }) }}
+	    {{ form_widget(edit_form.userRoles, { 'attr': {'class': 'text'} }) }}
+		<div class="errors">
+			{{ form_errors(edit_form.userRoles) }}
+		</div>
+	    <span class="break"><!-- --></span>
+
+		<fieldset class="metadata-fieldset">
+			<legend>{{ 'field.metadata' | trans({},'user') }}</legend>
+	    	
+			<ul class="metadata" id="metadata-fields-list" data-prototype="{{ form_widget(edit_form.userMetadatas.get('prototype')) | e }}">
+	    	    {% for metadata in edit_form.userMetadatas %}
+	    	    <li>	
+	        		<div>
+	        	    	<div>
+							{{ form_label(metadata.name, 'field.metadata.name' | trans({},'user'), { 'attr' : {'class': 'label-i'} }) }}
+							{{ form_widget(metadata.name, { 'attr': {'class': 'text'} }) }}
+							<div class="errors">
+								{{ form_errors(metadata.name) }}
+							</div>
+						</div>
+			        	<div>
+							{{ form_label(metadata.value, 'field.metadata.value' | trans({},'user'), { 'attr' : {'class': 'label-i'} }) }}
+							{{ form_widget(metadata.value, { 'attr': {'class': 'text'} }) }}
+							<div class="errors">
+								{{ form_errors(metadata.value) }}
+							</div>
+						</div>
+						<a class="btn-delete delete-button" href="javascript:;" title="{{ 'action.delete_metadata' | trans({},'user') }}">x</a>
+					    <span class="break"><!-- --></span>
+					</div>
+				</li>
+	    	    {% endfor %}
+		    </ul>
+			
+			<a id="add-metadata" class="btn150 right delete_metadata" href="javascript:;">{{ 'action.add_metadata' | trans({},'user') }}</a>
+			<span class="break"><!-- --></span>
+	    </fieldset>
+
+		<div class="hidden">
+	  		{{ form_rest(edit_form) }}
+		</div>	    
+	
+	    <a class="big-button submit-button" href="javascript:;" title="{{ 'action.update' | trans({},'user') }}">{{ 'action.update' | trans({},'user') }}</a>
+            <input type="submit" style="display: none" value="Submit" />
+	</form>
+
+	<ul class="record_actions mt20">
+	    <li>
+	        <a class="btn150" href="{{ path('frontend_portal_user_index', { 'load_state': 'true' }) }}">
+	            {{ 'action.back' | trans({},'user') }}
+	        </a>
+	    </li>
+        {% if hasPermissions('DELETE', 'USER') %}
+	    <li>
+			<a id="delete_button" user_id="{{ entity.id }}" class="btn100 submit-button">
+			    {{ 'action.delete' | trans({},'user') }}
+			</a>
+	    </li>
+        {% endif %}
+	</ul>
+{% endblock %}
